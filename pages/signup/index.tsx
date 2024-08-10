@@ -1,6 +1,7 @@
 import Header from "@/src/component/atom/Header/Header";
 import Text from "@/src/component/atom/Text";
 import { color } from "@/src/utils/color-map";
+import axios from "axios";
 import { useRouter } from "next/router";
 import { useState } from "react";
 
@@ -11,7 +12,7 @@ const LoginPage = () => {
   const [passwordCheck, setPasswordCheck] = useState("");
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 
-  const signUpHandler = () => {
+  const signUpHandler = async () => {
     if (!id) {
       alert("아이디를 입력해주세요");
     } else if (!password) {
@@ -19,7 +20,18 @@ const LoginPage = () => {
     } else if (password !== passwordCheck) {
       alert("비밀번호가 일치하지 않습니다");
     } else {
-      // 회원가입 로직
+      try {
+        const res = await axios.post(
+          "https://api.summerflow.fun/v1/auth/signup",
+          {
+            id,
+            password,
+          }
+        );
+        localStorage.setItem("userId", res.data.id);
+      } catch (error) {
+        alert("회원가입에 실패했습니다");
+      }
     }
   };
 

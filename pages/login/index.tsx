@@ -1,6 +1,7 @@
 import Header from "@/src/component/atom/Header/Header";
 import Text from "@/src/component/atom/Text";
 import { color } from "@/src/utils/color-map";
+import axios from "axios";
 import { useRouter } from "next/router";
 import { useState } from "react";
 
@@ -10,13 +11,25 @@ const LoginPage = () => {
   const [password, setPassword] = useState("");
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 
-  const loginHandler = () => {
+  const loginHandler = async () => {
     if (!id) {
       alert("아이디를 입력해주세요");
     } else if (!password) {
       alert("비밀번호를 입력해주세요");
     } else {
-      //로그인 로직
+      try {
+        const res = await axios.post(
+          "https://api.summerflow.fun/v1/auth/login",
+          {
+            id,
+            password,
+          }
+        );
+        localStorage.setItem("userId", res.data.id);
+        router.push("/main");
+      } catch (error) {
+        alert("로그인에 실패했습니다");
+      }
     }
   };
 
@@ -40,11 +53,13 @@ const LoginPage = () => {
           <section className="px-5 mt-[88px]">
             <div className="flex flex-col gap-3">
               <input
+                value={id}
                 className="py-3 px-6 rounded-full outline-none"
                 placeholder="아이디"
                 onChange={(e) => setId(e.target.value)}
               />
               <input
+                value={password}
                 className="py-3 px-6 rounded-full  outline-none"
                 placeholder="비밀번호"
                 type={isPasswordVisible ? "text" : "password"}

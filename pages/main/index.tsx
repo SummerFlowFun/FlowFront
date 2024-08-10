@@ -26,6 +26,12 @@ const MainPage = () => {
     setAnimateNumber(Math.floor(UserScore / 20) - 1);
   }, [UserScore]);
 
+  useEffect(() => {
+    if (localStorage.getItem("userId") === null) {
+      router.push("/login");
+    }
+  }, [router]);
+
   return (
     <>
       <main className={`w-screen h-screen grid place-items-center`}>
