@@ -78,10 +78,6 @@ const SearchMealPage = () => {
     }
   }, [debounceSearch]);
 
-  if (loading) {
-    return <MiniLoading />;
-  }
-
   return (
     <main className={`w-screen h-screen grid place-items-center`}>
       <div
@@ -114,7 +110,9 @@ const SearchMealPage = () => {
             </div>
           </div>
           {loading ? (
-            <MiniLoading />
+            <div className="flex flex-row justify-center mt-10">
+              <MiniLoading />
+            </div>
           ) : (
             <>
               <div className="flex flex-col gap-4 mt-5 pb-10">

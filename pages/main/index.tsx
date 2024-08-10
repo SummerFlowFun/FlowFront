@@ -42,7 +42,7 @@ const MainPage = () => {
 
   const closeModalHandler = () => {
     setShowModal(false);
-    router.push("/main"); // Clears the query parameter from the URL
+    router.replace("/main");
   };
 
   return (
