@@ -1,6 +1,7 @@
 import Header from "@/src/component/atom/Header/Header";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+import { getColor } from "../../components/main/colorManage";
 import {
   Face0,
   Face100,
@@ -8,8 +9,7 @@ import {
   Face50,
   Face75,
   WhiteBarTest,
-} from "./SVG/mainSVG";
-import { getColor } from "./utils/colorManage";
+} from "../../components/main/mainSVG";
 
 const MainPage = () => {
   const [pregnantPeriod, setPregnantPeriod] = useState<number>(0);
