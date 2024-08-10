@@ -34,7 +34,6 @@ const SearchPage = () => {
 
   const handleName = (e: any) => {
     const Value = e.target.value;
-
     setSearchQuery(Value);
     if (Value === "") NameIndex.current = 0;
     else NameIndex.current = -1;
