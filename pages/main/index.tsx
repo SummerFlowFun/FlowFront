@@ -1,5 +1,7 @@
 import Header from "@/src/component/atom/Header/Header";
+import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+import { getColor } from "../../components/main/colorManage";
 import {
   Face0,
   Face100,
@@ -8,8 +10,6 @@ import {
   Face75,
   WhiteBar,
 } from "../../components/main/mainSVG";
-import { getColor } from "../../components/main/colorManage";
-import { useRouter } from "next/router";
 
 const MainPage = () => {
   const [pregnantPeriod, setPregnantPeriod] = useState<number>(0);
@@ -19,10 +19,18 @@ const MainPage = () => {
 
   const router = useRouter();
 
+  const fileChangeHandler = (e: any) => {};
+
   useEffect(() => {
     setBackgroundColor(getColor(UserScore));
     setAnimateNumber(Math.floor(UserScore / 20) - 1);
   }, [UserScore]);
+
+  useEffect(() => {
+    if (localStorage.getItem("userId") === null) {
+      router.push("/login");
+    }
+  }, [router]);
 
   return (
     <>
@@ -122,16 +130,19 @@ const MainPage = () => {
               >
                 <button
                   className={`bg-milky_white py-2 px-8 rounded-full shadow-lg`}
+                  onClick={() => router.push("/main/searchmeal?time=breakfast")}
                 >
                   아침
                 </button>
                 <button
                   className={`bg-milky_white py-2 px-8 rounded-full shadow-lg`}
+                  onClick={() => router.push("/main/searchmeal?time=lunch")}
                 >
                   점심
                 </button>
                 <button
                   className={`bg-milky_white py-2 px-8 rounded-full shadow-lg`}
+                  onClick={() => router.push("/main/searchmeal?time=dinner")}
                 >
                   저녁
                 </button>
@@ -145,9 +156,11 @@ const MainPage = () => {
                 >
                   나 이거 먹어도 돼??
                 </button>
+
                 <button
                   className={`shadow-lg relative w-[3rem] h-[3rem] rounded-full relative`}
                   style={{ backgroundColor: backgroundColor }}
+                  onClick={() => router.push("/main/detect")}
                 >
                   <div
                     className={`absolute w-[1.2rem] h-[1.2rem] rounded-full shadow-lg bg-white top-4 right-1`}
