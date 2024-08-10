@@ -1,6 +1,5 @@
 import Text from "@/src/component/atom/Text";
 import { color } from "@/src/utils/color-map";
-import Head from "next/head";
 
 export default function Home() {
   return (
