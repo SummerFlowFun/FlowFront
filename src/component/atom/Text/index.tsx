@@ -25,7 +25,7 @@ const Text = ({
 
   return (
     <span
-      className={`${combinedClassNames} whitespace-pre-wrap break-all`}
+      className={`${String(combinedClassNames)} whitespace-pre-wrap break-all `}
       style={{ color: color, ...style }}
       onClick={onClick}
     >
