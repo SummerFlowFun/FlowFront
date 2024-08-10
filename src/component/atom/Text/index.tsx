@@ -1,4 +1,4 @@
-import { FontSize, getFontSizeClass } from "@/pages/src/utils/typography";
+import { FontSize, getFontSizeClass } from "@/src/utils/typography";
 import { ReactNode } from "react";
 
 interface TextProps {
