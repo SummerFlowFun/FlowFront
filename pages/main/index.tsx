@@ -9,8 +9,8 @@ import {
   FaceRounded,
   WhiteBar,
   WhiteBarTest,
-} from "./SVG/mainSVG";
-import { getColor } from "./utils/colorManage";
+} from "../../components/main/mainSVG";
+import { getColor } from "../../components/main/colorManage";
 import { useRouter } from "next/router";
 
 const MainPage = () => {
