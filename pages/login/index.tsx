@@ -1,10 +1,8 @@
+import Header from "@/src/component/atom/Header/Header";
 import Text from "@/src/component/atom/Text";
 import { color } from "@/src/utils/color-map";
-import Image from "next/image";
 import { useRouter } from "next/router";
 import { useState } from "react";
-import ARROW_LEFT_ICON from "../../src/assets/icon/arrow-left-icon.svg";
-import CLOSE_ICON from "../../src/assets/icon/close-icon.svg";
 
 const LoginPage = () => {
   const router = useRouter();
@@ -15,10 +13,7 @@ const LoginPage = () => {
   return (
     <div className={`w-screen h-screen grid place-items-center `}>
       <div className={`w-full max-w-[26.875rem] h-full bg-white`}>
-        <div className="py-3 flex flex-row px-4 justify-between items-center">
-          <Image src={ARROW_LEFT_ICON} alt={""} onClick={() => router.back()} />
-          <Image src={CLOSE_ICON} alt={""} onClick={() => router.back()} />
-        </div>
+        <Header title="" />
         <div className="bg-milky_white h-full">
           <div className="pt-[80px] px-10">
             <div className="flex flex-col gap-1">
