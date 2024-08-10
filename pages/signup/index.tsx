@@ -14,7 +14,7 @@ const SignUpPage = () => {
           <Text fontSize={"title"}>회원가입</Text>
           <Image src={CLOSE_ICON} alt={""} onClick={() => router.back()} />
         </div>
-        <div className="bg-[#F5EEE6]"></div>
+        <div className="bg-milky_white"></div>
       </div>
     </div>
   );

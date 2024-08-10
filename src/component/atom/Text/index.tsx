@@ -26,7 +26,7 @@ const Text = ({
   return (
     <span
       className={`${String(combinedClassNames)} whitespace-pre-wrap break-all `}
-      style={{ color: color, ...style }}
+      style={{ color: String(color), ...style }}
       onClick={onClick}
     >
       {children}

@@ -1,4 +1,5 @@
 export type FontSize =
+  | "bigTitle"
   | "title"
   | "body1Bold"
   | "body1"
@@ -8,6 +9,8 @@ export type FontSize =
 
 export const getFontSizeClass = (size?: FontSize): string => {
   switch (size) {
+    case "bigTitle":
+      return "text-2xl font-bold";
     case "title":
       return "text-xl font-bold";
     case "body1Bold":
