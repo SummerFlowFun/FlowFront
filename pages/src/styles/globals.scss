@@ -1,0 +1,93 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+@layer base {
+  html {
+    @apply text-font-normal;
+
+    // Font
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-font-smoothing: antialiased;
+
+    @supports (-webkit-font-smoothing: subpixel-antialiased) {
+      -webkit-font-smoothing: subpixel-antialiased;
+    }
+  }
+  html,
+  body {
+    height: 100%;
+    min-height: 100%;
+
+    /* Check browser is safari */
+
+    @supports (background: -webkit-named-image(i)) {
+      min-height: -webkit-fill-available;
+    }
+  }
+  img {
+    -webkit-touch-callout: none;
+    user-select: none;
+  }
+  #__next {
+    @apply min-h-full w-full select-none;
+  }
+
+  span {
+    @apply inline-block;
+  }
+
+  th {
+    @apply whitespace-nowrap;
+  }
+
+  td {
+    @apply select-text whitespace-nowrap;
+  }
+  img {
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -o-user-select: none;
+    user-select: none;
+    -webkit-user-drag: none;
+    -khtml-user-drag: none;
+    -moz-user-drag: none;
+    -o-user-drag: none;
+    user-drag: none;
+  }
+  video {
+    border-radius: 6px !important;
+  }
+  *:focus,
+  *:active,
+  *:visited {
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  [hidden] {
+    display: none !important;
+  }
+}
+
+.truncate {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.line-clamp-3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+@import "./layouts.scss";

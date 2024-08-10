@@ -1,0 +1,30 @@
+@layer base {
+  .mobile-layout {
+    @apply m-auto w-full max-w-[425px] bg-white;
+  }
+}
+
+@layer utilities {
+  .row {
+    @apply flex flex-row;
+  }
+
+  .column {
+    @apply flex flex-col;
+  }
+
+  .bottom-btn {
+    @apply fixed bottom-0 pt-3 pb-6 px-4 mobile-layout;
+  }
+
+  .z-always {
+    z-index: 9999;
+  }
+  .scroll-hidden {
+    scrollbar-width: none;
+
+    &::-webkit-scrollbar {
+      @apply hidden;
+    }
+  }
+}
