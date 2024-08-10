@@ -1,4 +1,5 @@
 import Header from "@/src/component/atom/Header/Header";
+import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import {
   Face0,
@@ -6,12 +7,9 @@ import {
   Face25,
   Face50,
   Face75,
-  FaceRounded,
-  WhiteBar,
   WhiteBarTest,
 } from "./SVG/mainSVG";
 import { getColor } from "./utils/colorManage";
-import { useRouter } from "next/router";
 
 const MainPage = () => {
   const [pregnantPeriod, setPregnantPeriod] = useState<number>(0);
@@ -20,6 +18,8 @@ const MainPage = () => {
   const [animateNumber, setAnimateNumber] = useState<number>(0);
 
   const router = useRouter();
+
+  const fileChangeHandler = (e: any) => {};
 
   useEffect(() => {
     setBackgroundColor(getColor(UserScore));
@@ -147,9 +147,11 @@ const MainPage = () => {
                 >
                   나 이거 먹어도 돼??
                 </button>
+
                 <button
                   className={`shadow-lg relative w-[3rem] h-[3rem] rounded-full relative`}
                   style={{ backgroundColor: backgroundColor }}
+                  onClick={() => router.push("/main/detect")}
                 >
                   <div
                     className={`absolute w-[1.2rem] h-[1.2rem] rounded-full shadow-lg bg-white top-4 right-1`}
