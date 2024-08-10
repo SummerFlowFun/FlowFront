@@ -1,6 +1,6 @@
 import Header from "@/src/component/atom/Header/Header";
-import { MiniLoading } from "../Loading/Loading";
 import { useEffect } from "react";
+import { MiniLoading } from "../Loading/Loading";
 
 export const SearchLoading = ({ foodName, setStage, setFoodData }: any) => {
   const getFoodData = () => {

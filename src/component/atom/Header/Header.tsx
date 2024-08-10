@@ -15,7 +15,7 @@ const Header = (props: Props) => {
 
   return (
     <>
-      <div className="fixed top-0 py-3 flex flex-row px-4 justify-between items-center bg-transparent">
+      <div className="fixed top-0 w-full max-w-[26.875rem] py-3 flex flex-row px-4 justify-between items-center bg-transparent">
         <Image
           src={leftIcon ? leftIcon : ARROW_LEFT_ICON}
           alt={""}
