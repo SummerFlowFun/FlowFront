@@ -130,16 +130,19 @@ const MainPage = () => {
               >
                 <button
                   className={`bg-milky_white py-2 px-8 rounded-full shadow-lg`}
+                  onClick={() => router.push("/main/searchmeal?time=breakfast")}
                 >
                   아침
                 </button>
                 <button
                   className={`bg-milky_white py-2 px-8 rounded-full shadow-lg`}
+                  onClick={() => router.push("/main/searchmeal?time=lunch")}
                 >
                   점심
                 </button>
                 <button
                   className={`bg-milky_white py-2 px-8 rounded-full shadow-lg`}
+                  onClick={() => router.push("/main/searchmeal?time=dinner")}
                 >
                   저녁
                 </button>

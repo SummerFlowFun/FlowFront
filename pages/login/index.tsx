@@ -21,14 +21,18 @@ const LoginPage = () => {
         const res = await axios.post(
           "https://api.summerflow.fun/v1/auth/login",
           {
-            id,
-            password,
+            email: id,
+            password: password,
           }
         );
         localStorage.setItem("userId", res.data.id);
         router.push("/main");
-      } catch (error) {
-        alert("로그인에 실패했습니다");
+      } catch (error: any) {
+        if (error.response.status === 403) {
+          alert("비밀번호가 일치하지 않습니다");
+        } else {
+          alert("로그인에 실패했습니다");
+        }
       }
     }
   };

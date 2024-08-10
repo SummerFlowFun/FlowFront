@@ -24,13 +24,18 @@ const LoginPage = () => {
         const res = await axios.post(
           "https://api.summerflow.fun/v1/auth/signup",
           {
-            id,
-            password,
+            email: id,
+            password: password,
           }
         );
         localStorage.setItem("userId", res.data.id);
-      } catch (error) {
-        alert("회원가입에 실패했습니다");
+        router.push("/main");
+      } catch (error: any) {
+        if (error.response.status === 409) {
+          alert("이미 가입된 이메일입니다");
+        } else {
+          alert("회원가입에 실패했습니다");
+        }
       }
     }
   };
