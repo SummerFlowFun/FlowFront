@@ -87,7 +87,7 @@ const SearchMealPage = () => {
       <div
         className={`w-full max-w-[26.875rem] h-full grid grid-rows-[3rem_auto] `}
       >
-        <div className="flex flex-col">
+        <div className="flex flex-col px-4">
           <div className="p-4 cursor-pointer" onClick={() => router.back()}>
             <ArrowIconV2 />
           </div>

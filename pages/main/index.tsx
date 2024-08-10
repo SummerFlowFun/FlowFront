@@ -1,4 +1,5 @@
 import Header from "@/src/component/atom/Header/Header";
+import { Modal } from "@/src/component/atom/Modal.tsx/Modal";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { getColor } from "../../components/main/colorManage";
@@ -16,10 +17,10 @@ const MainPage = () => {
   const [UserScore, setUserScore] = useState<number>(0);
   const [backgroundColor, setBackgroundColor] = useState<string>("#8CA4EE");
   const [animateNumber, setAnimateNumber] = useState<number>(0);
+  const [showModal, setShowModal] = useState<boolean>(false);
+  const [food, setFood] = useState<string>("");
 
   const router = useRouter();
-
-  const fileChangeHandler = (e: any) => {};
 
   useEffect(() => {
     setBackgroundColor(getColor(UserScore));
@@ -31,6 +32,18 @@ const MainPage = () => {
       router.push("/login");
     }
   }, [router]);
+
+  useEffect(() => {
+    if (router.query.food) {
+      setFood(router.query.food as string);
+      setShowModal(true);
+    }
+  }, [router.query.food]);
+
+  const closeModalHandler = () => {
+    setShowModal(false);
+    router.push("/main"); // Clears the query parameter from the URL
+  };
 
   return (
     <>
@@ -180,6 +193,40 @@ const MainPage = () => {
           </div>
         </div>
       </main>
+      {showModal && (
+        <Modal onClose={closeModalHandler}>
+          <span className="font-jeju text-2xl ">나의 점수</span>
+          <div className="mt-4">
+            <span className="font-jeju text-5xl text-juicy_orange ">42</span>
+            <span className="font-jeju">점</span>
+          </div>
+          <div className="h-[1px] bg-[#8E8E8E] my-10" />
+          <span className="font-jeju text-lg ">어제의 나의 식단</span>
+          <div className="flex flex-col gap-1 mt-4 ">
+            <div className="flex flex-row justify-between">
+              <div className="flex flex-row gap-5 jb">
+                <span className="font-bold">탄수화물</span>
+                <span>2mg</span>
+              </div>
+              <span>25%</span>
+            </div>
+            <div className="flex flex-row justify-between">
+              <div className="flex flex-row gap-5 jb">
+                <span className="font-bold">탄수화물</span>
+                <span>2mg</span>
+              </div>
+              <span>25%</span>
+            </div>
+            <div className="flex flex-row justify-between">
+              <div className="flex flex-row gap-5 jb">
+                <span className="font-bold">탄수화물</span>
+                <span>2mg</span>
+              </div>
+              <span>25%</span>
+            </div>
+          </div>
+        </Modal>
+      )}
     </>
   );
 };
