@@ -14,6 +14,7 @@ const config: Config = {
         water_blue: "#378FC1",
         juicy_orange: "#E56A40",
         bananan: "E9B65D",
+        gray1: "A1A1A1",
       },
       fontFamily: {
         dgm: ["DungGeunMo"],
