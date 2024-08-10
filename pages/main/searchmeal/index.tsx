@@ -1,202 +1,159 @@
-import Header from "@/src/component/atom/Header/Header";
+import ArrowIconV2 from "@/src/assets/icon/arrow-left-icon-v2";
+import useDebounce from "@/src/hooks/useDebounce";
+import axios from "axios";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
-import { getColor } from "@/components/main/colorManage";
-import {
-  Face0,
-  Face100,
-  Face25,
-  Face50,
-  Face75,
-  WhiteBar,
-} from "@/components/main/mainSVG";
-import { Modal } from "@/src/component/atom/Modal.tsx/Modal";
+import { MiniLoading } from "@/components/Loading/Loading";
+import fallbackImage from "../../../public/FlowSmile.webp";
 
-const MainPage = () => {
-  const [pregnantPeriod, setPregnantPeriod] = useState<number>(0);
-  const [UserScore, setUserScore] = useState<number>(0);
-  const [backgroundColor, setBackgroundColor] = useState<string>("#8CA4EE");
-  const [animateNumber, setAnimateNumber] = useState<number>(0);
-  const [showModal, setShowModal] = useState<boolean>(false);
-  const [food, setFood] = useState<string>("");
-
+const SearchMealPage = () => {
   const router = useRouter();
+  const [search, setSearch] = useState("");
+  const debounceSearch = useDebounce(search, 250);
+  const [data, setData] = useState<any>(null);
+  const [images, setImages] = useState<{ [key: string]: string }>({});
+  const [selectedFood, setSelectedFood] = useState<any>(null);
+  const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
-    setBackgroundColor(getColor(UserScore));
-    setAnimateNumber(Math.floor(UserScore / 20) - 1);
-  }, [UserScore]);
-
-  useEffect(() => {
-    if (localStorage.getItem("userId") === null) {
-      router.push("/login");
+  const getProductImage = async (query: any) => {
+    try {
+      const res = await axios.get(
+        `https://www.googleapis.com/customsearch/v1?key=AIzaSyC5IVsS0Y4UTlDgV7ReDvENrYtv_l2wpiI&cx=06ccd531cf7d3469d&q=${query}`
+      );
+      if (res.data.items) {
+        return res.data.items[0].pagemap.cse_image[0].src;
+      }
+    } catch (error) {
+      console.log("Error fetching image:", error);
     }
-  }, [router]);
-
-  useEffect(() => {
-    if (router.query.food) {
-      setFood(router.query.food as string);
-      setShowModal(true);
-    }
-  }, [router.query.food]);
-
-  const closeModalHandler = () => {
-    setShowModal(false);
-    router.push("/main"); // Clears the query parameter from the URL
+    return null;
   };
 
-  return (
-    <>
-      <main className={`w-screen h-screen grid place-items-center`}>
-        <div
-          className={`w-full max-w-[26.875rem] h-full grid grid-rows-[3rem_auto]`}
-          style={{ backgroundColor: backgroundColor }}
-        >
-          <div className={`w-full font-jeju`}>
-            <Header title={`임신 ${pregnantPeriod}주차`} />
-          </div>
-          <div
-            className={`w-full h-full pt-4 relative grid grid-rows-[6fr_1.4fr_2.6fr] `}
-          >
-            <div className={`grid place-items-center relative overflow-hidden`}>
-              <WhiteBar WhiteSpace={Math.abs(UserScore / 100 - 1)} />
-              <div
-                className={`absolute bottom-0 -right-20 animate-FadeIn   ${
-                  UserScore < 20
-                    ? "animate-MoveIn"
-                    : animateNumber === 0 && "animate-MoveOut"
-                }`}
-              >
-                <Face0 />
-              </div>
-              <div
-                className={`absolute bottom-0 -right-20 animate-FadeIn  ${
-                  UserScore >= 20 && UserScore < 40
-                    ? "animate-MoveIn"
-                    : animateNumber === 1 && "animate-MoveOut"
-                }`}
-              >
-                <Face25 />
-              </div>
-              <div
-                className={`absolute bottom-0 -right-20 animate-FadeIn  ${
-                  UserScore >= 40 && UserScore < 60
-                    ? "animate-MoveIn"
-                    : animateNumber === 2 && "animate-MoveOut"
-                }`}
-              >
-                <Face50 />
-              </div>
-              <div
-                className={`absolute bottom-0 -right-20 animate-FadeIn  ${
-                  UserScore >= 60 && UserScore < 80
-                    ? "animate-MoveIn"
-                    : animateNumber === 3 && "animate-MoveOut"
-                }`}
-              >
-                <Face75 />
-              </div>
-              <div
-                className={`absolute bottom-0 -right-20 animate-FadeIn  ${
-                  UserScore >= 80 && UserScore < 100
-                    ? "animate-MoveIn"
-                    : animateNumber === 4 && "animate-MoveOut"
-                }`}
-              >
-                <Face100 />
-              </div>
-            </div>
-            <div className={`w-full h-full flex flex-col  justify-evenly`}>
-              <div className={`w-full grid place-items-center`}>
-                <span
-                  className={` w-full text-center text-white font-jeju text-xl`}
-                >
-                  오늘의 필수 영양소
-                </span>
-              </div>
-              <div
-                className={`grid grid-cols-3 gap-2 mx-2 items-center justify-evenly`}
-              >
-                <div
-                  className={`bg-white text-center py-2 flex items-center justify-center rounded-full`}
-                >
-                  <span className={`font-neoB`}>지방</span>
-                </div>
-                <div
-                  className={`bg-white text-center py-2 flex items-center justify-center rounded-full`}
-                >
-                  <span className={`font-neoB`}>탄수화물</span>
-                </div>
-                <div
-                  className={`bg-white text-center py-2 flex items-center justify-center rounded-full`}
-                >
-                  <span className={`font-neoB`}>영양소</span>
-                </div>
-              </div>
-            </div>
-            <div
-              className={`bg-white w-full h-full flex flex-col items-center gap-2`}
-            >
-              <span className={`font-jeju`}>오늘 어떤 걸 드셨나요?</span>
-              <div
-                className={`rounded-full font-neoB w-4/5 items-center justify-between  h-[3rem] flex gap-4`}
-              >
-                <button
-                  className={`bg-milky_white py-2 px-8 rounded-full shadow-lg`}
-                  onClick={() => router.push("/main/searchmeal?time=breakfast")}
-                >
-                  아침
-                </button>
-                <button
-                  className={`bg-milky_white py-2 px-8 rounded-full shadow-lg`}
-                  onClick={() => router.push("/main/searchmeal?time=lunch")}
-                >
-                  점심
-                </button>
-                <button
-                  className={`bg-milky_white py-2 px-8 rounded-full shadow-lg`}
-                  onClick={() => router.push("/main/searchmeal?time=dinner")}
-                >
-                  저녁
-                </button>
-              </div>
-              <div
-                className={`w-4/5 h-[3rem] grid grid-cols-[8fr_2fr] place-items-center gap-2`}
-              >
-                <button
-                  className={`bg-milky_white shadow-lg rounded-full w-full h-full`}
-                  onClick={() => router.push("/main/search")}
-                >
-                  나 이거 먹어도 돼??
-                </button>
+  const searchHandler = async () => {
+    if (!debounceSearch) return;
+    setLoading(true);
+    try {
+      const res = await axios.get(
+        `https://api.summerflow.fun/v1/foods?query=${debounceSearch}`
+      );
+      setData(res.data);
 
-                <button
-                  className={`shadow-lg relative w-[3rem] h-[3rem] rounded-full relative`}
-                  style={{ backgroundColor: backgroundColor }}
-                  onClick={() => router.push("/main/detect")}
-                >
-                  <div
-                    className={`absolute w-[1.2rem] h-[1.2rem] rounded-full shadow-lg bg-white top-4 right-1`}
-                  />
-                  <div
-                    className={`absolute w-[1.2rem] h-[1.2rem] rounded-full shadow-lg bg-white top-4 right-4`}
-                  />
-                  <div
-                    className={`absolute w-[0.5rem] h-[0.5rem] rounded-full shadow-lg bg-black top-[1.3rem] right-1 animate-MovingAround`}
-                  />
-                  <div
-                    className={`absolute w-[0.5rem] h-[0.5rem] rounded-full shadow-lg bg-black top-[1.3rem] right-4 animate-MovingAround`}
-                  />
-                </button>
-              </div>
+      // Fetch images for each item
+      const imagesMap: { [key: string]: string } = {};
+      await Promise.all(
+        res.data.map(async (item: any) => {
+          const imageUrl = await getProductImage(item.식품명);
+          if (imageUrl) {
+            imagesMap[item.식품명] = imageUrl;
+          }
+        })
+      );
+      setImages(imagesMap);
+      setLoading(false);
+    } catch (error: any) {
+      if (error.response && error.response.status === 404) {
+        setData([]);
+        setLoading(false);
+      }
+      setLoading(false);
+      console.log(error);
+    }
+  };
+
+  const submitHandler = (itemTitle: string) => {
+    router.push({
+      pathname: "/main",
+      query: {
+        ...router.query,
+        food: itemTitle,
+      },
+    });
+  };
+
+  useEffect(() => {
+    if (!debounceSearch) {
+      setData(null);
+      return;
+    }
+  }, [debounceSearch]);
+
+  if (loading) {
+    return <MiniLoading />;
+  }
+
+  return (
+    <main className={`w-screen h-screen grid place-items-center`}>
+      <div
+        className={`w-full max-w-[26.875rem] h-full grid grid-rows-[3rem_auto] `}
+      >
+        <div className="flex flex-col">
+          <div className="p-4 cursor-pointer" onClick={() => router.back()}>
+            <ArrowIconV2 />
+          </div>
+          <div className="font-jeju text-3xl flex justify-center">
+            {router.query.time === "breakfast" && "아침"}
+            {router.query.time === "lunch" && "점심"}
+            {router.query.time === "dinner" && "저녁"}
+          </div>
+          <div className="flex flex-row justify-center mt-2">
+            에 무엇을 드셨나요?
+          </div>
+          <div className="relative">
+            <input
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              className="py-3 px-4 rounded-full border outline-none w-full mt-4 border-black bg-milky_white"
+              placeholder="음식을 입력해주세요"
+            />
+            <div
+              className="absolute right-1 top-1/2 -translate-y-3 bg-white rounded-full p-2 cursor-pointer"
+              onClick={searchHandler}
+            >
+              검색
             </div>
           </div>
+          {loading ? (
+            <MiniLoading />
+          ) : (
+            <>
+              <div className="flex flex-col gap-4 mt-5 pb-10">
+                {data?.length > 0 && debounceSearch ? (
+                  data?.map((item: any, index: number) => (
+                    <div
+                      key={index}
+                      className="flex flex-row gap-2 items-end cursor-pointer"
+                      onClick={() => submitHandler(item.식품명)}
+                    >
+                      <div className="w-[116px] h-[116px] relative">
+                        <img
+                          src={images[item.식품명] || fallbackImage.src}
+                          alt={item.식품명}
+                          className="w-full h-full object-cover rounded-lg"
+                          onError={(e) => {
+                            e.currentTarget.src = fallbackImage.src;
+                          }}
+                        />
+                      </div>
+                      <div className="flex w-auto flex-col gap-1 max-w-[230px]">
+                        <span className="text-sm font-bold">{item.식품명}</span>
+                        <span className="text-xs">{item.제조사명}</span>
+                        <span className="text-xs">{item.식품소분류명}</span>
+                      </div>
+                    </div>
+                  ))
+                ) : (
+                  <div className="flex justify-center">
+                    검색 결과가 없습니다.
+                  </div>
+                )}
+              </div>
+            </>
+          )}
         </div>
-      </main>
-      {true && <Modal onClose={closeModalHandler}>{food}</Modal>}
-    </>
+      </div>
+    </main>
   );
 };
 
-export default MainPage;
+export default SearchMealPage;
