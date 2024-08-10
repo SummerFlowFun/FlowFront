@@ -12,9 +12,19 @@ const Header = (props: Props) => {
   return (
     <>
       <div className="fixed top-0 py-3 flex flex-row px-4 justify-between items-center bg-transparent">
-        <Image src={ARROW_LEFT_ICON} alt={""} onClick={() => router.back()} />
+        <Image
+          src={ARROW_LEFT_ICON}
+          alt={""}
+          onClick={() => router.back()}
+          className="cursor-pointer"
+        />
         <span>{title}</span>
-        <Image src={CLOSE_ICON} alt={""} onClick={() => router.back()} />
+        <Image
+          src={CLOSE_ICON}
+          alt={""}
+          onClick={() => router.replace("/main")}
+          className="cursor-pointer"
+        />
       </div>
     </>
   );
