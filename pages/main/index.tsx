@@ -6,9 +6,7 @@ import {
   Face25,
   Face50,
   Face75,
-  FaceRounded,
   WhiteBar,
-  WhiteBarTest,
 } from "../../components/main/mainSVG";
 import { getColor } from "../../components/main/colorManage";
 import { useRouter } from "next/router";
@@ -40,7 +38,7 @@ const MainPage = () => {
             className={`w-full h-full pt-4 relative grid grid-rows-[6fr_1.4fr_2.6fr] `}
           >
             <div className={`grid place-items-center relative overflow-hidden`}>
-              <WhiteBarTest WhiteSpace={Math.abs(UserScore / 100 - 1)} />
+              <WhiteBar WhiteSpace={Math.abs(UserScore / 100 - 1)} />
               <div
                 className={`absolute bottom-0 -right-20 animate-FadeIn   ${
                   UserScore < 20
