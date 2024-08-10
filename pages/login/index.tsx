@@ -21,9 +21,18 @@ const LoginPage = () => {
         </div>
         <div className="bg-milky_white h-full">
           <div className="pt-[80px] px-10">
-            <div className="flex flex-col gap-1 ">
-              <Text fontSize="bigTitle">마미톡을 시작합니다</Text>
-              <Text fontSize="body1">저희와 함께 하세요</Text>
+            <div className="flex flex-col gap-1">
+              <div className="flex flex-row items-end ">
+                <Text fontSize="bigTitle" className="font-dgm text-4xl">
+                  맘마미
+                </Text>
+                <Text fontSize="bigTitle" className="font-dgm text-xl">
+                  를 시작합니다
+                </Text>
+              </div>
+              <Text fontSize="body1" className="font-neo text-sm">
+                저희와 함께 하세요
+              </Text>
             </div>
           </div>
           <section className="px-5 mt-[88px]">
