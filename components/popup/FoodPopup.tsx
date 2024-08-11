@@ -40,21 +40,37 @@ export const FoodPopup = ({ foodData, setFoodPopup }: any) => {
               className={`w-full h-full overflow-scroll  bg-milky_white flex flex-col rounded-lg items-center gap-2 justify-center`}
             >
               <div
-                className={`w-4/5 h-[25rem] p-4 overflow-scroll text-water_blue rounded-lg flex flex-col bg-white`}
+                className={`w-4/5 h-[25rem] p-4 overflow-scroll rounded-lg flex flex-col bg-white`}
               >
                 {NutriArr.map((item: any, index: number) => {
                   return (
-                    <div key={index} className={`flex gap-2`}>
+                    <div
+                      key={index}
+                      className={`flex gap-2 ${
+                        item.Max ? "text-juicy_orange" : "text-water_blue"
+                      }`}
+                    >
                       <span>{item.Name}</span>
                       <span>{`:`}</span>
+
                       <span>{item.Value}</span>
                     </div>
                   );
                 })}
               </div>
               <div className={`text-xs flex flex-col text-center font-jeju`}>
-                <span>해당 영양소를 참고해봤을떄 사용자님에겐</span>
-                <span>{`${foodData.score}점이 적당해요!`}</span>
+                {NutriArr.map((item: any, index: number) => {
+                  return (
+                    <>
+                      {item.Max ? (
+                        <span>{item.Name}이(가) 많이 들어있어요!!</span>
+                      ) : (
+                        <></>
+                      )}
+                    </>
+                  );
+                })}
+                <span>{`사용자님께는 ${foodData.score}점이 적당해요!`}</span>
               </div>
             </div>
           </div>

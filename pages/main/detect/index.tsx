@@ -112,15 +112,21 @@ const DetectPage = () => {
           return translatedClass;
         })
       );
+      if (translatedClasses.length === 0) {
+        alert("음식을 인식하지 못했어요! 다시 시도해주세요.");
+        router.back();
+      }
 
       try {
         let FoodDataTemp;
+        let lastEvaluatedKey;
         while (true) {
           try {
-            const FoodReq = await axios.get(
-              `https://api.summerflow.fun/v1/foods?query=${translatedClasses[0]}`
+            const FoodReq: any = await axios.get(
+              `https://api.summerflow.fun/v1/foods?query=${translatedClasses[0]}&lastEvaluatedKey=${lastEvaluatedKey}`
             );
             const FoodTempArr = FoodReq.data.foodInfos;
+            lastEvaluatedKey = FoodReq.data.lastEvaluatedKey.id;
             if (FoodTempArr.length > 0) {
               FoodDataTemp = FoodTempArr[0];
               break;
