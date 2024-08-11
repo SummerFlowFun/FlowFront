@@ -17,7 +17,7 @@ export default async function handler(
       messages: [
         {
           role: "system",
-          content: `Please Let me know how to eat ${FoodName} safely, give me answer in korean`,
+          content: `치킨을 먹을때 껍질을 벗겨서 먹으면 조금더 튀김없이 건강하게 먹을 수 있어, 이런식으로 ${FoodName}을 먹을때 건강하게 먹을 수 있는 방법이 있다면 알려줄래?`,
         },
       ],
       model: "gpt-4o",

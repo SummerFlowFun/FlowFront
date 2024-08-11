@@ -9,7 +9,7 @@ export const SearchGPTPopup = ({ foodData, setStage }: any) => {
 
   const getGPTAnswer = async () => {
     const req = await axios.post("/api/gptGenerate", {
-      foodName: foodData.name,
+      foodName: foodData["식품명"],
     });
 
     const message = req.data.answer;

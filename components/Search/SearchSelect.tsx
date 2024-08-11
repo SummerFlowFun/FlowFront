@@ -1,9 +1,19 @@
 import Header from "@/src/component/atom/Header/Header";
-import { MiniLoading } from "../Loading/Loading";
+import { MiniLoading, SmallMiniLoading } from "../Loading/Loading";
 import axios from "axios";
 import { ApiBaseURL } from "../URL";
+import { useEffect } from "react";
 
-export const SearchSelect = ({ setStage, foodArr, setFoodData }: any) => {
+export const SearchSelect = ({
+  setStage,
+  foodName,
+  foodArr,
+  setFoodArr,
+  setFoodData,
+  lastEvaluatedKey,
+  foodNumber,
+  setFoodNumber,
+}: any) => {
   const handleSelect = async (food: any) => {
     const TempData = food;
     const UserId = localStorage.getItem("userId");
@@ -19,6 +29,33 @@ export const SearchSelect = ({ setStage, foodArr, setFoodData }: any) => {
     setFoodData(food);
     setStage(2);
   };
+
+  const getFoodData = async () => {
+    try {
+      while (true) {
+        const FoodReq = await axios.get(
+          `https://api.summerflow.fun/v1/foods?query=${foodName}&lastEvaluatedKey=${lastEvaluatedKey.current}`
+        );
+        const FoodTempArr = FoodReq.data.foodInfos;
+        const FoodlastEvaluatedKey = FoodReq.data.lastEvaluatedKey.id;
+        setFoodArr((prev: any) => [...prev, ...FoodTempArr]);
+        setFoodNumber((prev: any) => (prev += FoodTempArr.length));
+        lastEvaluatedKey.current = FoodlastEvaluatedKey;
+        if (!FoodlastEvaluatedKey || FoodlastEvaluatedKey === "NONE") break;
+      }
+    } catch (e: any) {
+      if (e.response.status === 404) {
+        alert("검색 결과가 없습니다.");
+        setStage(0);
+        return;
+      }
+    }
+  };
+
+  useEffect(() => {
+    getFoodData();
+  }, []);
+
   return (
     <>
       <div
@@ -44,6 +81,23 @@ export const SearchSelect = ({ setStage, foodArr, setFoodData }: any) => {
               </button>
             );
           })}
+        </div>
+        <div
+          className={`w-full h-[10rem] bg-milky_white flex flex-col items-center justify-center gap-2`}
+        >
+          <SmallMiniLoading />
+          <div className={`flex flex-col text-center justify-center`}>
+            <span
+              className={`font-jeju `}
+            >{`맘마미는 10만개의 음식데이터중에서 원하는 음식`}</span>
+
+            <span
+              className={`font-jeju `}
+            >{`성분과 데이터를 최소 100개 이상 찾아줘요!`}</span>
+            <span
+              className={`font-jeju `}
+            >{`현재 ${foodNumber}개의 ${foodName}에 대한 정보를 찾고있어요...`}</span>
+          </div>
         </div>
       </div>
     </>
