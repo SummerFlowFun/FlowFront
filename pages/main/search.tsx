@@ -54,6 +54,7 @@ const SearchPage = () => {
             foodArr={foodArr}
             setStage={setStage}
             foodData={foodData}
+            setFoodArr={setFoodArr}
           />
         )}
         {stage === 3 && <SearchPopup foodData={foodData} setStage={setStage} />}

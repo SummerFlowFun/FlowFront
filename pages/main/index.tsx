@@ -32,7 +32,6 @@ const MainPage = () => {
     try {
       const req = await axios.get(`${ApiBaseURL}/user/information/${userId}`);
       const data = req.data;
-      console.log(data);
       const pregnantWeek = PregnantWeekCalculator(data.pregnant);
 
       setPregnantPeriod(pregnantWeek);
@@ -44,14 +43,14 @@ const MainPage = () => {
     }
   };
 
-  useEffect(() => {
-    setInterval(() => {
-      setUserScore((prev) => {
-        if (prev < 100) return prev + 1;
-        return 0;
-      });
-    }, 100);
-  }, []);
+  // useEffect(() => {
+  //   setInterval(() => {
+  //     setUserScore((prev) => {
+  //       if (prev < 100) return prev + 1;
+  //       return 0;
+  //     });
+  //   }, 100);
+  // }, []);
 
   useEffect(() => {
     getUserData();

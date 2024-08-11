@@ -2,15 +2,28 @@ import Header from "@/src/component/atom/Header/Header";
 import axios from "axios";
 import { Fragment, useEffect } from "react";
 
-export const SearchData = ({ foodArr, foodData, setStage }: any) => {
+export const SearchData = ({
+  foodArr,
+  foodData,
+  setStage,
+  setFoodArr,
+}: any) => {
   const CallGPTPopUp = async () => {
     setStage(4);
   };
 
-  const ImageMapping = () => {
-    for (let i = 0; i < foodArr.length; i++) {
-      foodArr.image = getProductImage(foodArr[i]["식품명"]);
-    }
+  const updateFoodArrWithImages = async () => {
+    const updatedFoodArr = await Promise.all(
+      foodArr.map(async (item: any) => {
+        const image = await getProductImage(item["식품명"]);
+        return {
+          ...item,
+          image,
+        };
+      })
+    );
+
+    setFoodArr(updatedFoodArr);
   };
 
   const getProductImage = async (query: any) => {
@@ -28,7 +41,7 @@ export const SearchData = ({ foodArr, foodData, setStage }: any) => {
   };
 
   useEffect(() => {
-    ImageMapping();
+    // updateFoodArrWithImages();
     console.log(foodData);
   }, []);
 
@@ -83,19 +96,14 @@ export const SearchData = ({ foodArr, foodData, setStage }: any) => {
                         className={`w-[10rem] h-[12rem] bg-white  rounded-md shadow-lg`}
                       >
                         <button
-                          className={`w-full h-[11rem] text-black grid place-items-center`}
+                          className={`w-[8rem] h-[11rem] text-black grid place-items-center`}
                         >
-                          <img
-                            src={food.image}
-                            alt="food"
-                            className={`w-[6rem] h-[6rem]`}
-                          />
+                          <span
+                            className={`w-full font-jeju text-xs text-center`}
+                          >
+                            {food["식품명"]}
+                          </span>
                         </button>
-                        <span
-                          className={`w-full font-jeju text-xs text-center`}
-                        >
-                          {food["식품명"]}
-                        </span>
                       </div>
                     ) : (
                       <></>
