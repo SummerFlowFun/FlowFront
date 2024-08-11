@@ -14,7 +14,7 @@ export const SearchData = ({
 
   const updateFoodArrWithImages = async () => {
     const updatedFoodArr = await Promise.all(
-      foodArr.map(async (item) => {
+      foodArr.map(async (item: any) => {
         const image = await getProductImage(item["식품명"]);
         return {
           ...item,
