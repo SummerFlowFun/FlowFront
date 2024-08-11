@@ -14,10 +14,8 @@ export const SearchSelect = ({ setStage, foodArr, setFoodData }: any) => {
       }&mealDate=${"2024-08-11"}`
     );
 
-    const ScoreData = ScoreReq.data;
-    console.log(ScoreData);
-    const Score = -30;
-    TempData.score = Score;
+    const ScoreData = ScoreReq.data.score_diff;
+    TempData.score = ScoreData;
     setFoodData(food);
     setStage(2);
   };

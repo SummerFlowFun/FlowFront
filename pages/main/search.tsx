@@ -41,7 +41,7 @@ const SearchPage = () => {
         {(stage === 2 || stage === 3) && (
           <SearchData setStage={setStage} foodData={foodData} />
         )}
-        {stage === 3 && <SearchPopup setStage={setStage} />}
+        {stage === 3 && <SearchPopup foodData={foodData} setStage={setStage} />}
         {stage === 4 && (
           <SearchGPTPopup foodData={foodData} setStage={setStage} />
         )}

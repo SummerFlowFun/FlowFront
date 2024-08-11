@@ -29,7 +29,8 @@ const LoginPage = () => {
           }
         );
         localStorage.setItem("userId", res.data.id);
-        router.push("/main");
+
+        router.push("/info");
       } catch (error: any) {
         if (error.response.status === 409) {
           alert("이미 가입된 이메일입니다");
