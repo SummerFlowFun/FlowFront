@@ -2,13 +2,13 @@ import * as cocoSsd from "@tensorflow-models/coco-ssd";
 import "@tensorflow/tfjs";
 
 import { MiniLoading } from "@/components/Loading/Loading";
+import { FoodGPTPopup } from "@/components/popup/FoodGPTPopup";
+import { FoodPopup } from "@/components/popup/FoodPopup";
 import { CloseIconV2 } from "@/src/assets/icon/close-icon-v2";
+import axios from "axios";
 import { useRouter } from "next/router";
 import { useEffect, useRef, useState } from "react";
 import translate from "translate";
-import axios from "axios";
-import { FoodPopup } from "@/components/popup/FoodPopup";
-import { FoodGPTPopup } from "@/components/popup/FoodGPTPopup";
 
 type Prediction = {
   bbox: [number, number, number, number];
@@ -194,7 +194,7 @@ const DetectPage = () => {
             </div>
           </>
         ) : (
-          <div className="gap-10 items-center flex flex-col">
+          <div className="gap-10 items-center flex flex-col pb-[100px]">
             {predictions.length > 0 ? (
               <div className="flex flex-row justify-center h-fit mt-5">
                 <ul>
