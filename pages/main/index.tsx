@@ -13,6 +13,7 @@ import {
 } from "../../components/main/mainSVG";
 import axios from "axios";
 import { ApiBaseURL } from "@/components/URL";
+import { PregnantWeekCalculator } from "@/components/utils/Pregnant";
 
 const MainPage = () => {
   const [pregnantPeriod, setPregnantPeriod] = useState<number>(0);
@@ -30,11 +31,10 @@ const MainPage = () => {
     try {
       const req = await axios.get(`${ApiBaseURL}/user/information/${userId}`);
       const data = req.data;
-      console.log(data);
-      // setPregnantPeriod(data.pregnantPeriod);
-      // setUserScore(data.score);
-      setPregnantPeriod(0);
-      setUserScore(53);
+      const pregnantWeek = PregnantWeekCalculator(data.pregnant);
+      setPregnantPeriod(pregnantWeek);
+      if (!data.score) setUserScore(0);
+      else setUserScore(data.score);
     } catch (e: any) {
       alert(e.message);
       console.log(e);

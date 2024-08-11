@@ -20,7 +20,7 @@ export const SearchPopup = ({ setStage }: any) => {
             className={`bg-milky_white overflow-scroll flex flex-col gap-4 justify-center`}
           >
             <div className={`w-full h-[7rem] flex items-end justify-center`}>
-              <span className={`font-jeju`}>어제 식단 영양 분포</span>
+              <span className={`font-jeju`}>식단 영양 분포</span>
             </div>
             <div
               className={`w-full h-full overflow-scroll  bg-milky_white flex rounded-lg justify-center`}

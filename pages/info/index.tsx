@@ -10,7 +10,7 @@ const InfoPage = () => {
   const [year, setYear] = useState("");
   const [month, setMonth] = useState("");
   const [day, setDay] = useState("");
-  const [isPragnent, setIsPragnent] = useState<boolean | null>(false);
+  const [isPregnant, setIsPregnant] = useState<boolean | null>(false);
 
   useEffect(() => {
     if (localStorage.getItem("userId") === null) {
@@ -30,7 +30,7 @@ const InfoPage = () => {
       return;
     }
 
-    if (isPragnent === null) {
+    if (isPregnant === null) {
       alert("임신 여부를 선택해주세요.");
       return;
     }
@@ -41,8 +41,8 @@ const InfoPage = () => {
           "userId"
         )}`,
         {
-          isPragnent: isPragnent,
-          pragnentDate: `${year}-${month}-${day}`,
+          isPregnant: isPregnant,
+          pregnantDate: `${year}-${month}-${day}`,
           illnesses:
             inputValue === "" ? illnesses : illnesses.concat(inputValue),
         }
@@ -81,20 +81,20 @@ const InfoPage = () => {
                 <div className="flex mt-2 ml-4 flex-row gap-3">
                   <div
                     className={`flex flex-row rounded-full py-1 px-3 bg-white cursor-pointer ${
-                      isPragnent ? "text-[#378FC1]" : ""
+                      isPregnant ? "text-[#378FC1]" : ""
                     }`}
                     onClick={() => {
-                      setIsPragnent(true);
+                      setIsPregnant(true);
                     }}
                   >
                     예
                   </div>
                   <div
                     className={`flex flex-row rounded-full py-1 px-3 bg-white cursor-pointer ${
-                      !isPragnent ? "text-[#378FC1]" : ""
+                      !isPregnant ? "text-[#378FC1]" : ""
                     }`}
                     onClick={() => {
-                      setIsPragnent(false);
+                      setIsPregnant(false);
                     }}
                   >
                     아니오
