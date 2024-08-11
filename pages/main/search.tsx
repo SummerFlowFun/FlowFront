@@ -4,7 +4,7 @@ import { SearchLoading } from "@/components/Search/SearchLoading";
 import { SearchMain } from "@/components/Search/SearchMain";
 import { SearchPopup } from "@/components/Search/SearchPopup";
 import { SearchSelect } from "@/components/Search/SearchSelect";
-import { useState } from "react";
+import { useRef, useState } from "react";
 
 // 임시 데이터
 
@@ -13,6 +13,8 @@ const SearchPage = () => {
   const [foodName, setFoodName] = useState<string>("");
   const [foodArr, setFoodArr] = useState<any>([]);
   const [foodData, setFoodData] = useState<any>();
+  const [foodNumber, setFoodNumber] = useState<number>(0);
+  const lastEvaluatedKey = useRef<string>("");
 
   return (
     <>
@@ -28,14 +30,23 @@ const SearchPage = () => {
           <SearchLoading
             foodName={foodName}
             setStage={setStage}
+            foodArr={foodArr}
             setFoodArr={setFoodArr}
+            lastEvaluatedKey={lastEvaluatedKey}
+            foodNumber={foodNumber}
+            setFoodNumber={setFoodNumber}
           />
         )}
         {stage === 5 && (
           <SearchSelect
             setStage={setStage}
+            foodName={foodName}
             foodArr={foodArr}
+            setFoodArr={setFoodArr}
             setFoodData={setFoodData}
+            lastEvaluatedKey={lastEvaluatedKey}
+            foodNumber={foodNumber}
+            setFoodNumber={setFoodNumber}
           />
         )}
         {(stage === 2 || stage === 3) && (
