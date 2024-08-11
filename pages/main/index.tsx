@@ -1,5 +1,7 @@
+import { ApiBaseURL } from "@/components/URL";
+import { PregnantWeekCalculator } from "@/components/utils/Pregnant";
 import Header from "@/src/component/atom/Header/Header";
-import { Modal } from "@/src/component/atom/Modal.tsx/Modal";
+import axios from "axios";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { getColor } from "../../components/main/colorManage";
@@ -11,9 +13,6 @@ import {
   Face75,
   WhiteBar,
 } from "../../components/main/mainSVG";
-import axios from "axios";
-import { ApiBaseURL } from "@/components/URL";
-import { PregnantWeekCalculator } from "@/components/utils/Pregnant";
 
 const MainPage = () => {
   const [pregnantPeriod, setPregnantPeriod] = useState<number>(0);
@@ -217,7 +216,11 @@ const MainPage = () => {
         </div>
       </main>
       {showModal && (
-        <Modal onClose={closeModalHandler}>
+        <div
+          className="
+        fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white rounded-lg p-8 shadow-lg w-80 h-fit z-50 
+        "
+        >
           <span className="font-jeju text-2xl ">나의 점수</span>
           <div className="mt-4">
             <span className="font-jeju text-5xl text-juicy_orange ">42</span>
@@ -248,7 +251,15 @@ const MainPage = () => {
               <span>25%</span>
             </div>
           </div>
-        </Modal>
+          <div className="flex flex-row w-full justify-between mt-10">
+            <button
+              className="bg-juicy_orange text-white w-full rounded-full py-2 px-4"
+              onClick={closeModalHandler}
+            >
+              확인
+            </button>
+          </div>
+        </div>
       )}
     </>
   );
