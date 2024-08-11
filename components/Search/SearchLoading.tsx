@@ -1,14 +1,25 @@
 import Header from "@/src/component/atom/Header/Header";
 import { useEffect } from "react";
 import { MiniLoading } from "../Loading/Loading";
+import axios from "axios";
+import { ApiBaseURL } from "../URL";
 
-export const SearchLoading = ({ foodName, setStage, setFoodData }: any) => {
-  const getFoodData = () => {
-    alert(foodName);
-    setFoodData({ name: foodName, score: 30 });
-    setTimeout(() => {
-      setStage(2);
-    }, 2000);
+export const SearchLoading = ({ foodName, setFoodArr, setStage }: any) => {
+  const getFoodData = async () => {
+    try {
+      const FoodReq = await axios.get(
+        `https://api.summerflow.fun/v1/foods?query=${foodName}`
+      );
+      console.log(FoodReq.data);
+      setFoodArr(FoodReq.data);
+      setStage(5);
+    } catch (e: any) {
+      if (e.response.status === 404) {
+        alert("검색 결과가 없습니다.");
+        setStage(0);
+        return;
+      }
+    }
   };
 
   useEffect(() => {

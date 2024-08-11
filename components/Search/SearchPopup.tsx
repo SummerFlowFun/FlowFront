@@ -29,43 +29,6 @@ export const SearchPopup = ({ setStage }: any) => {
                 className={`w-4/5 h-[25rem] overflow-scroll rounded-lg flex flex-col bg-white`}
               >
                 <span>1</span>
-                <span>21213213</span>
-                <span>21213213</span>
-                <span>21213213</span>
-                <span>21213213</span>
-                <span>21213213</span>
-                <span>21213213</span>
-                <span>21213213</span>
-                <span>21213213</span>
-                <span>21213213</span>
-                <span>21213213</span>
-                <span>21213213</span>
-                <span>21213213</span>
-                <span>21213213</span>
-                <span>21213213</span>
-                <span>21213213</span>
-                <span>21213213</span>
-                <span>21213213</span>
-                <span>21213213</span>
-                <span>21213213</span>
-                <span>21213213</span>
-                <span>21213213</span>
-                <span>21213213</span>
-                <span>21213213</span>
-                <span>21213213</span>
-                <span>21213213</span>
-                <span>21213213</span>
-                <span>21213213</span>
-                <span>21213213</span>
-                <span>21213213</span>
-                <span>21213213</span>
-                <span>21213213</span>
-                <span>21213213</span>
-                <span>21213213</span>
-                <span>21213213</span>
-                <span>21213213</span>
-                <span>21213213</span>
-                <span>21213213</span>
                 <span>end</span>
               </div>
             </div>

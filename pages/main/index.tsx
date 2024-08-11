@@ -11,6 +11,8 @@ import {
   Face75,
   WhiteBar,
 } from "../../components/main/mainSVG";
+import axios from "axios";
+import { ApiBaseURL } from "@/components/URL";
 
 const MainPage = () => {
   const [pregnantPeriod, setPregnantPeriod] = useState<number>(0);
@@ -21,6 +23,27 @@ const MainPage = () => {
   const [food, setFood] = useState<string>("");
 
   const router = useRouter();
+
+  const getUserData = async () => {
+    const userId = localStorage.getItem("userId");
+    console.log(userId);
+    try {
+      const req = await axios.get(`${ApiBaseURL}/user/information/${userId}`);
+      const data = req.data;
+      console.log(data);
+      // setPregnantPeriod(data.pregnantPeriod);
+      // setUserScore(data.score);
+      setPregnantPeriod(0);
+      setUserScore(53);
+    } catch (e: any) {
+      alert(e.message);
+      console.log(e);
+    }
+  };
+
+  useEffect(() => {
+    getUserData();
+  }, []);
 
   useEffect(() => {
     setBackgroundColor(getColor(UserScore));
