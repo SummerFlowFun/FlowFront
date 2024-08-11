@@ -38,6 +38,7 @@ const SearchMealPage = () => {
   const searchHandler = async () => {
     if (!debounceSearch) return;
     setLoading(true);
+    setFoodNumber(0);
 
     let apiChecker = 0;
     let allFoodInfos: any[] = [];
@@ -50,7 +51,7 @@ const SearchMealPage = () => {
         );
 
         const FoodTempArr = res.data.foodInfos;
-        const FoodlastEvaluatedKey = res.data.lastEvaluatedKey.id;
+
         setFoodArr((prev: any) => [...prev, ...FoodTempArr]);
         setFoodNumber((prev: any) => (prev += FoodTempArr.length));
 
@@ -72,8 +73,8 @@ const SearchMealPage = () => {
 
           setImages((prevImages) => ({ ...prevImages, ...imagesMap }));
         }
-
-        if (!lastEvaluatedKey || apiChecker >= 10) break;
+        console.log("lastEvaluatedKey", apiChecker, lastEvaluatedKey);
+        if (!lastEvaluatedKey || apiChecker >= 5) break;
 
         apiChecker++;
       }
