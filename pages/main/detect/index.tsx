@@ -1,12 +1,12 @@
 import * as cocoSsd from "@tensorflow-models/coco-ssd";
 import "@tensorflow/tfjs";
 
+import { MiniLoading } from "@/components/Loading/Loading";
 import { CloseIconV2 } from "@/src/assets/icon/close-icon-v2";
 import { Modal } from "@/src/component/atom/Modal.tsx/Modal";
 import { useRouter } from "next/router";
 import { useEffect, useRef, useState } from "react";
 import translate from "translate";
-
 type Prediction = {
   bbox: [number, number, number, number];
   class: string;
@@ -23,6 +23,7 @@ const DetectPage = () => {
     []
   );
   const [showModal, setShowModal] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   const imageRef = useRef<HTMLImageElement | null>(null);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
@@ -93,7 +94,7 @@ const DetectPage = () => {
       setPredictions(predictions);
 
       const translatedClasses = await Promise.all(
-        predictions.map(async (prediction) => {
+        predictions.map(async (prediction: any) => {
           const translatedClass = await translate(prediction.class, {
             to: "ko",
           });
@@ -103,6 +104,7 @@ const DetectPage = () => {
 
       setTranslatedPredictions(translatedClasses);
       drawPredictions(predictions);
+      setIsLoading(false);
     };
   };
 
@@ -136,7 +138,7 @@ const DetectPage = () => {
   return (
     <main className={`w-screen h-screen grid place-items-center`}>
       <div
-        className={`w-full max-w-[26.875rem] h-full grid grid-rows-[3rem_auto]`}
+        className={`w-full max-w-[26.875rem] h-full bg-milky_white grid grid-rows-[3rem_auto]`}
       >
         <div
           className="flex justify-end  p-4 cursor-pointer "
@@ -145,87 +147,89 @@ const DetectPage = () => {
           <CloseIconV2 />
         </div>
 
-        <div className="gap-10 items-center flex flex-col">
-          {predictions.length > 0 ? (
-            <div className="flex flex-row justify-center h-fit mt-5">
-              <ul>
-                {translatedPredictions.map((translatedClass, index) => (
-                  <li key={index} className="font-jeju text-6xl text-[#808080]">
-                    {translatedClass}!!
-                  </li>
-                ))}
-              </ul>
+        {isLoading ? (
+          <>
+            <div
+              className={`w-full h-full flex flex-col items-center justify-center gap-4`}
+            >
+              <MiniLoading />
+              <span className={`font-jeju`}>
+                FLOW AI가 음식을 판별하는 중이에요.
+              </span>
             </div>
-          ) : (
-            <></>
-          )}{" "}
-          <div className=" w-full justify-center h-fit flex ">
-            {image ? (
-              <>
-                <img
-                  className=" rounded-lg  "
-                  src={image}
-                  alt="Uploaded"
-                  width={300}
-                  height={300}
-                />
-              </>
-            ) : (
-              <video
-                ref={videoRef}
-                width={300}
-                height={300}
-                className="rounded-lg"
-              />
-            )}
-            <canvas
-              ref={canvasRef}
-              style={{
-                display: "none",
-                position: "absolute",
-                top: 0,
-                left: 0,
-              }}
-            />
-          </div>
-          <div>
-            {translatedPredictions.length > 0 ? (
+          </>
+        ) : (
+          <div className="gap-10 items-center flex flex-col">
+            {predictions.length > 0 ? (
               <div className="flex flex-row justify-center h-fit mt-5">
                 <ul>
-                  {translatedPredictions.map((prediction, index) => (
+                  {translatedPredictions.map((translatedClass, index) => (
                     <li
                       key={index}
-                      className="flex flex-col items-center gap-8"
+                      className="font-jeju text-6xl text-[#808080]"
                     >
-                      <div>
-                        <span className="text-7xl font-jeju mr-2  text-[#000]">
-                          {prediction}
-                        </span>
-                        {"  "}
-                        <span className="text-3xl  text-[#000] pt-4 flex justify-end">
-                          를 먹으면
-                        </span>
-                      </div>
-                      <div>
-                        <span className="text-7xl font-jeju mr-2  text-[#E56A40]">
-                          -58
-                        </span>
-                        <span className="text-3xl  text-[#000]">점</span>
-                      </div>
+                      {translatedClass}!!
                     </li>
                   ))}
                 </ul>
               </div>
             ) : (
               <></>
+            )}{" "}
+            <div className=" w-full justify-center h-fit flex ">
+              {image && (
+                <>
+                  <img
+                    className=" rounded-lg  "
+                    src={image}
+                    alt="Uploaded"
+                    width={300}
+                    height={300}
+                  />
+                  <canvas
+                    ref={canvasRef}
+                    width={imageRef.current?.width || 0}
+                    height={imageRef.current?.height || 0}
+                    style={{ position: "absolute", top: 0, left: 0 }}
+                  />
+                </>
+              )}
+            </div>
+            <div>
+              {translatedPredictions.length > 0 ? (
+                <div className="flex flex-row justify-center h-fit mt-5">
+                  <ul>
+                    {translatedPredictions.map((prediction, index) => (
+                      <li
+                        key={index}
+                        className="flex flex-col items-center gap-8"
+                      >
+                        <div>
+                          <span className="text-7xl font-jeju mr-2  text-[#E56A40]">
+                            -58
+                          </span>
+                          <span className="text-3xl  text-[#000]">점</span>
+                        </div>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ) : (
+                <></>
+              )}
+            </div>
+            {predictions.length > 0 && (
+              <>
+                <button className="py-3 mt-5 cursor-pointer shadow-lg rounded-full justify-center flex text-base w-[247px] bg-white">
+                  왜 -58점 인가요?
+                </button>
+                <button className="py-3 cursor-pointer shadow-lg rounded-full justify-center flex text-base w-[247px] bg-white">
+                  더 안전하게 먹는법?
+                </button>
+              </>
             )}
           </div>
-          {predictions.length > 0 && (
-            <div className="py-3 mt-5 cursor-pointer rounded-full justify-center flex text-base w-[247px] bg-[#F5EEE6]">
-              왜 -58점 인가요?
-            </div>
-          )}
-        </div>
+        )}
       </div>
 
       <input

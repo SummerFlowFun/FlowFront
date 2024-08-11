@@ -56,6 +56,10 @@ const config: Config = {
           "0%": { transform: "translateY(100%)" },
           "100%": { transform: "translateY(0%)" },
         },
+        PopOut: {
+          "0%": { transform: "translateX(-0.5rem) translateY(-0.5rem)" },
+          "100%": { transform: "translateX(0) translateY(0)" },
+        },
       },
       animation: {
         FadeIn: "FadeIn 2s forwards",
@@ -65,6 +69,7 @@ const config: Config = {
         EyeMoving: "EyeMoving 10s infinite",
         Loading: "Loading 2s infinite",
         MoveUp: "MoveUp 1s forwards",
+        PopOut: "PopOut 0.5s forwards",
       },
     },
   },
