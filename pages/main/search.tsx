@@ -50,7 +50,11 @@ const SearchPage = () => {
           />
         )}
         {(stage === 2 || stage === 3) && (
-          <SearchData setStage={setStage} foodData={foodData} />
+          <SearchData
+            foodArr={foodArr}
+            setStage={setStage}
+            foodData={foodData}
+          />
         )}
         {stage === 3 && <SearchPopup foodData={foodData} setStage={setStage} />}
         {stage === 4 && (

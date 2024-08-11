@@ -2,7 +2,7 @@ import Header from "@/src/component/atom/Header/Header";
 import { MiniLoading, SmallMiniLoading } from "../Loading/Loading";
 import axios from "axios";
 import { ApiBaseURL } from "../URL";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 export const SearchSelect = ({
   setStage,
@@ -14,6 +14,8 @@ export const SearchSelect = ({
   foodNumber,
   setFoodNumber,
 }: any) => {
+  const [isFind, setIsFind] = useState<boolean>(true);
+
   const handleSelect = async (food: any) => {
     const TempData = food;
     const UserId = localStorage.getItem("userId");
@@ -31,8 +33,8 @@ export const SearchSelect = ({
   };
 
   const getFoodData = async () => {
-    try {
-      while (true) {
+    while (true) {
+      try {
         const FoodReq = await axios.get(
           `https://api.summerflow.fun/v1/foods?query=${foodName}&lastEvaluatedKey=${lastEvaluatedKey.current}`
         );
@@ -42,12 +44,19 @@ export const SearchSelect = ({
         setFoodNumber((prev: any) => (prev += FoodTempArr.length));
         lastEvaluatedKey.current = FoodlastEvaluatedKey;
         if (!FoodlastEvaluatedKey || FoodlastEvaluatedKey === "NONE") break;
-      }
-    } catch (e: any) {
-      if (e.response.status === 404) {
-        alert("검색 결과가 없습니다.");
-        setStage(0);
-        return;
+      } catch (e: any) {
+        console.log(e.message);
+        if (e.message.includes("id")) {
+          setIsFind(false);
+          break;
+        }
+        if (e.response.status === 404) {
+          alert("검색 결과가 없습니다.");
+          setIsFind(false);
+          break;
+        } else {
+          continue;
+        }
       }
     }
   };
@@ -85,7 +94,7 @@ export const SearchSelect = ({
         <div
           className={`w-full h-[10rem] bg-milky_white flex flex-col items-center justify-center gap-2`}
         >
-          <SmallMiniLoading />
+          {isFind && <SmallMiniLoading />}
           <div className={`flex flex-col text-center justify-center`}>
             <span
               className={`font-jeju `}
@@ -94,9 +103,15 @@ export const SearchSelect = ({
             <span
               className={`font-jeju `}
             >{`성분과 데이터를 최소 100개 이상 찾아줘요!`}</span>
-            <span
-              className={`font-jeju `}
-            >{`현재 ${foodNumber}개의 ${foodName}에 대한 정보를 찾고있어요...`}</span>
+            {isFind ? (
+              <span
+                className={`font-jeju `}
+              >{`현재 ${foodNumber}개의 ${foodName}에 대한 정보를 찾고있어요...`}</span>
+            ) : (
+              <span
+                className={`font-jeju `}
+              >{`${foodNumber}개의 ${foodName}에 대한 정보를 찾았어요...`}</span>
+            )}
           </div>
         </div>
       </div>

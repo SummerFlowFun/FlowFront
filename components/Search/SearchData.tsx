@@ -2,18 +2,33 @@ import Header from "@/src/component/atom/Header/Header";
 import axios from "axios";
 import { Fragment, useEffect } from "react";
 
-export const SearchData = ({ foodData, setStage }: any) => {
-  const TempArr = [
-    1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 3, 12, 4232, 345, 2346, 3456, 4567,
-    4567, 465, 23, 412, 345345, 67, 456723, 46, 36587, 4566, 45143, 63456, 84,
-    56462, 4567, 4678, 456, 735, 835, 67,
-  ];
-
+export const SearchData = ({ foodArr, foodData, setStage }: any) => {
   const CallGPTPopUp = async () => {
     setStage(4);
   };
 
+  const ImageMapping = () => {
+    for (let i = 0; i < foodArr.length; i++) {
+      foodArr.image = getProductImage(foodArr[i]["식품명"]);
+    }
+  };
+
+  const getProductImage = async (query: any) => {
+    try {
+      const res = await axios.get(
+        `https://www.googleapis.com/customsearch/v1?key=AIzaSyC5IVsS0Y4UTlDgV7ReDvENrYtv_l2wpiI&cx=06ccd531cf7d3469d&q=${query}`
+      );
+      if (res.data.items) {
+        return res.data.items[0].pagemap.cse_image[0].src;
+      }
+    } catch (error) {
+      console.log("Error fetching image:", error);
+    }
+    return null;
+  };
+
   useEffect(() => {
+    ImageMapping();
     console.log(foodData);
   }, []);
 
@@ -59,14 +74,32 @@ export const SearchData = ({ foodData, setStage }: any) => {
               <span>이런 음식은 어떠세요?</span>
             </div>
             <div className={`flex overflow-scroll gap-2`}>
-              {TempArr.map((item, index) => {
+              {foodArr.map((food: any, index: number) => {
+                console.log(food);
                 return (
                   <Fragment key={index}>
-                    <div
-                      className={`w-[10rem] h-[12rem] bg-white rounded-md shadow-lg`}
-                    >
-                      <button className={`w-[8rem]`}>{item}</button>
-                    </div>
+                    {food["식품소분류명"] === foodData["식품소분류명"] ? (
+                      <div
+                        className={`w-[10rem] h-[12rem] bg-white  rounded-md shadow-lg`}
+                      >
+                        <button
+                          className={`w-full h-[11rem] text-black grid place-items-center`}
+                        >
+                          <img
+                            src={food.image}
+                            alt="food"
+                            className={`w-[6rem] h-[6rem]`}
+                          />
+                        </button>
+                        <span
+                          className={`w-full font-jeju text-xs text-center`}
+                        >
+                          {food["식품명"]}
+                        </span>
+                      </div>
+                    ) : (
+                      <></>
+                    )}
                   </Fragment>
                 );
               })}

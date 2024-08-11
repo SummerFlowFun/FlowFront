@@ -14,9 +14,9 @@ export const SearchLoading = ({
   setFoodNumber,
 }: any) => {
   const getFoodData = async () => {
-    try {
-      let Pagechecker = 0;
-      while (true) {
+    let apiChecker = 0;
+    while (true) {
+      try {
         const FoodReq = await axios.get(
           `https://api.summerflow.fun/v1/foods?query=${foodName}&lastEvaluatedKey=${lastEvaluatedKey.current}`
         );
@@ -25,19 +25,20 @@ export const SearchLoading = ({
         setFoodArr((prev: any) => [...prev, ...FoodTempArr]);
         setFoodNumber((prev: number) => (prev += FoodTempArr.length));
         lastEvaluatedKey.current = FoodlastEvaluatedKey;
-        Pagechecker += FoodTempArr.length;
-        if (Pagechecker >= 10) break;
+        if (apiChecker >= 10) break;
         if (!FoodlastEvaluatedKey || FoodlastEvaluatedKey === "NONE") break;
-      }
-      setStage(5);
-    } catch (e: any) {
-      console.log(e);
-      if (e.response?.status === 404) {
-        alert("검색 결과가 없습니다.");
-        setStage(0);
-        return;
+        apiChecker++;
+      } catch (e: any) {
+        if (e.response?.status === 404) {
+          alert("검색 결과가 없습니다.");
+          setStage(0);
+          return;
+        } else {
+          apiChecker++;
+        }
       }
     }
+    setStage(5);
   };
 
   useEffect(() => {
