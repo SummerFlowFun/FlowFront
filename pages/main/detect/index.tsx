@@ -345,6 +345,7 @@ const DetectPage = () => {
             먹어도 <br />
             돼?!
           </div>
+          <span>음식 사진이 정확하게 보이도록 첨부해주세요!</span>
           <div className="flex flex-row justify-center gap-4 my-5">
             <button
               className="rounded-full font-jeju text-white bg-water_blue p-4 items-center flex justify-center w-[150px] h-fit"
