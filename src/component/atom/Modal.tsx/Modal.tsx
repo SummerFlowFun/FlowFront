@@ -14,7 +14,7 @@ export const Modal = ({ children, onClose, className }: Props) => {
         <p>{children}</p>
         <button
           onClick={onClose}
-          className="mt-4 px-4 py-2 w-full bg-juicy_orange text-white rounded-full"
+          className="mt-4 font-jeju px-4 py-2 w-full bg-juicy_orange text-white rounded-full"
         >
           닫기
         </button>
