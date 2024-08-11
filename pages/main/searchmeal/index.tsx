@@ -39,10 +39,9 @@ const SearchMealPage = () => {
       );
       setData(res.data);
 
-      // Fetch images for each item
       const imagesMap: { [key: string]: string } = {};
       await Promise.all(
-        res.data.map(async (item: any) => {
+        res.data?.foodInfos?.map(async (item: any) => {
           const imageUrl = await getProductImage(item.식품명);
           if (imageUrl) {
             imagesMap[item.식품명] = imageUrl;
@@ -116,8 +115,8 @@ const SearchMealPage = () => {
           ) : (
             <>
               <div className="flex flex-col gap-4 mt-5 pb-10">
-                {data?.length > 0 && debounceSearch ? (
-                  data?.map((item: any, index: number) => (
+                {data?.foodInfos?.length > 0 && debounceSearch ? (
+                  data?.foodInfos?.map((item: any, index: number) => (
                     <div
                       key={index}
                       className="flex flex-row gap-2 items-end cursor-pointer"
