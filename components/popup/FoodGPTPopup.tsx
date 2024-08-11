@@ -2,20 +2,19 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { MiniLoading } from "../Loading/Loading";
 import TextWithLineBreaks from "../utils/TextBreakLine";
-export const FoodGPTPopup = ({ foodData, closePopup }: any) => {
+
+export const FoodGPTPopup = ({ foodData, setFoodPopup }: any) => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [GPTMessage, setGPTMessage] = useState<string>("");
+
   const getGPTAnswer = async () => {
     const req = await axios.post("/api/gptGenerate", {
-      foodName: foodData.name,
+      foodName: foodData["식품명"],
     });
 
     const message = req.data.answer;
     setGPTMessage(message);
-
-    setTimeout(() => {
-      setIsLoading(false);
-    }, 2000);
+    setIsLoading(false);
   };
 
   useEffect(() => {
@@ -34,7 +33,7 @@ export const FoodGPTPopup = ({ foodData, closePopup }: any) => {
             className={`w-full h-[3rem] bg-milky_white grid grid-cols-[auto_3rem] place-items-center`}
           >
             <div></div>
-            <button onClick={() => closePopup(false)} className={`font-bold`}>
+            <button onClick={() => setFoodPopup(0)} className={`font-bold`}>
               X
             </button>
           </div>
