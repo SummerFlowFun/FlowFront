@@ -10,12 +10,16 @@ import fallbackImage from "../../../public/FlowSmile.webp";
 const SearchMealPage = () => {
   const router = useRouter();
   const [search, setSearch] = useState("");
-  const debounceSearch = useDebounce(search, 250);
+  const debounceSearch = useDebounce(search, 0);
   const [data, setData] = useState<any>(null);
 
   const [images, setImages] = useState<{ [key: string]: string }>({});
   const [selectedFood, setSelectedFood] = useState<any>(null);
   const [loading, setLoading] = useState(false);
+  const [foodArr, setFoodArr] = useState<any>([]);
+  const [foodNumber, setFoodNumber] = useState<number>(0);
+
+  const [isFind, setIsFind] = useState<boolean>(true);
 
   const getProductImage = async (query: any) => {
     try {
@@ -34,30 +38,58 @@ const SearchMealPage = () => {
   const searchHandler = async () => {
     if (!debounceSearch) return;
     setLoading(true);
-    try {
-      const res = await axios.get(
-        `https://api.summerflow.fun/v1/foods?query=${debounceSearch}`
-      );
-      setData(res.data);
 
-      const imagesMap: { [key: string]: string } = {};
-      await Promise.all(
-        res.data?.foodInfos?.map(async (item: any) => {
-          const imageUrl = await getProductImage(item.식품명);
-          if (imageUrl) {
-            imagesMap[item.식품명] = imageUrl;
-          }
-        })
-      );
-      setImages(imagesMap);
+    let apiChecker = 0;
+    let allFoodInfos: any[] = [];
+    let lastEvaluatedKey = "";
+
+    try {
+      while (true) {
+        const res = await axios.get(
+          `https://api.summerflow.fun/v1/foods?query=${debounceSearch}&lastEvaluatedKey=${lastEvaluatedKey}`
+        );
+
+        const FoodTempArr = res.data.foodInfos;
+        const FoodlastEvaluatedKey = res.data.lastEvaluatedKey.id;
+        setFoodArr((prev: any) => [...prev, ...FoodTempArr]);
+        setFoodNumber((prev: any) => (prev += FoodTempArr.length));
+
+        const foodInfos = res.data.foodInfos;
+        lastEvaluatedKey = res.data.lastEvaluatedKey?.id;
+
+        if (foodInfos && foodInfos.length > 0) {
+          allFoodInfos = [...allFoodInfos, ...foodInfos];
+
+          const imagesMap: { [key: string]: string } = {};
+          await Promise.all(
+            foodInfos.map(async (item: any) => {
+              const imageUrl = await getProductImage(item.식품명);
+              if (imageUrl) {
+                imagesMap[item.식품명] = imageUrl;
+              }
+            })
+          );
+
+          setImages((prevImages) => ({ ...prevImages, ...imagesMap }));
+        }
+
+        if (!lastEvaluatedKey || apiChecker >= 10) break;
+
+        apiChecker++;
+      }
+
+      setData({ foodInfos: allFoodInfos });
       setLoading(false);
     } catch (error: any) {
       if (error.response && error.response.status === 404) {
+        setIsFind(false);
         setData([]);
-        setLoading(false);
+      } else {
+        setIsFind(false);
+        console.error("Error fetching data:", error);
       }
+      setIsFind(false);
       setLoading(false);
-      console.log(error);
     }
   };
 
@@ -131,8 +163,26 @@ const SearchMealPage = () => {
             </div>
           </div>
           {loading ? (
-            <div className="flex flex-row justify-center mt-10">
+            <div className="flex flex-col items-center gap-5 mt-10">
               <MiniLoading />
+              <div className={`flex flex-col text-center justify-center`}>
+                <span
+                  className={`font-jeju `}
+                >{`맘마미는 10만개의 음식데이터중에서 원하는 음식`}</span>
+
+                <span
+                  className={`font-jeju `}
+                >{`성분과 데이터를 최소 100개 이상 찾아줘요!`}</span>
+                {isFind ? (
+                  <span
+                    className={`font-jeju `}
+                  >{`현재 ${foodNumber}개의 ${debounceSearch}에 대한 정보를 찾고있어요...`}</span>
+                ) : (
+                  <span
+                    className={`font-jeju `}
+                  >{`${foodNumber}개의 ${debounceSearch}에 대한 정보를 찾았어요...`}</span>
+                )}
+              </div>
             </div>
           ) : (
             <>
