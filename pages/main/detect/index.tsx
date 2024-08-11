@@ -371,7 +371,8 @@ const DetectPage = () => {
             </button> */}
             <button
               className="rounded-full font-jeju text-white bg-water_blue p-4 items-center flex justify-center w-full h-fit"
-              onClick={() => {
+              onClick={(e) => {
+                e.preventDefault();
                 fileInputRef.current?.click();
                 setShowModal(false);
               }}
