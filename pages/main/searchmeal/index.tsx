@@ -12,7 +12,7 @@ const SearchMealPage = () => {
   const [search, setSearch] = useState("");
   const debounceSearch = useDebounce(search, 250);
   const [data, setData] = useState<any>(null);
-  console.log(data);
+
   const [images, setImages] = useState<{ [key: string]: string }>({});
   const [selectedFood, setSelectedFood] = useState<any>(null);
   const [loading, setLoading] = useState(false);
