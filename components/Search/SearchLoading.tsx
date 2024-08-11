@@ -26,7 +26,7 @@ export const SearchLoading = ({
         setFoodNumber((prev: number) => (prev += FoodTempArr.length));
         lastEvaluatedKey.current = FoodlastEvaluatedKey;
         Pagechecker += FoodTempArr.length;
-        if (Pagechecker > 15) break;
+        if (Pagechecker >= 10) break;
         if (!FoodlastEvaluatedKey || FoodlastEvaluatedKey === "NONE") break;
       }
       setStage(5);
