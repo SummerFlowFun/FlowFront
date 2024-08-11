@@ -20,13 +20,15 @@ const MainPage = () => {
   const [backgroundColor, setBackgroundColor] = useState<string>("#8CA4EE");
   const [animateNumber, setAnimateNumber] = useState<number>(0);
   const [showModal, setShowModal] = useState<boolean>(false);
+  const [foodId, setFoodId] = useState<string>("");
   const [food, setFood] = useState<string>("");
+  const [mealData, setMealData] = useState<any>(null);
 
   const router = useRouter();
 
   const getUserData = async () => {
     const userId = localStorage.getItem("userId");
-    console.log(userId);
+
     try {
       const req = await axios.get(`${ApiBaseURL}/user/information/${userId}`);
       const data = req.data;
@@ -66,6 +68,25 @@ const MainPage = () => {
     setShowModal(false);
     router.replace("/main");
   };
+
+  // useEffect(() => {
+  //   try {
+  //     const fetchData = async () => {
+  //       const params = {
+  //         userId: localStorage.getItem("userId"),
+  //         foodId: router.query.foodId,
+  //         mealDate: new Date().toISOString().split("T")[0],
+  //       };
+  //       const res = await axios.get(`${ApiBaseURL}/foods/daily-score-diff`, {
+  //         params,
+  //       });
+  //       setMealData(res.data);
+  //     };
+  //     fetchData();
+  //   } catch (error) {
+  //     console.log("Error fetching mealData:", error);
+  //   }
+  // }, []);
 
   return (
     <>
