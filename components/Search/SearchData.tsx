@@ -64,7 +64,6 @@ export const SearchData = ({
 
   useEffect(() => {
     // updateFoodArrWithImages();
-    console.log(foodData);
   }, []);
 
   return (
@@ -121,7 +120,6 @@ export const SearchData = ({
               </div>
               <div className={`flex overflow-scroll gap-2`}>
                 {foodArr.map((food: any, index: number) => {
-                  console.log(food);
                   return (
                     <Fragment key={index}>
                       {food["식품소분류명"] === foodData["식품소분류명"] ? (

@@ -113,15 +113,22 @@ const DetectPage = () => {
         })
       );
 
-      console.log(translatedClasses);
-
       try {
-        const FoodReq = await axios.get(
-          `https://api.summerflow.fun/v1/foods?query=${translatedClasses[0]}`
-        );
-
-        const FoodTempArr = FoodReq.data.foodInfos;
-        const FoodDataTemp = FoodTempArr[0];
+        let FoodDataTemp;
+        while (true) {
+          try {
+            const FoodReq = await axios.get(
+              `https://api.summerflow.fun/v1/foods?query=${translatedClasses[0]}`
+            );
+            const FoodTempArr = FoodReq.data.foodInfos;
+            if (FoodTempArr.length > 0) {
+              FoodDataTemp = FoodTempArr[0];
+              break;
+            }
+          } catch (e: any) {
+            continue;
+          }
+        }
 
         const UserId = localStorage.getItem("userId");
         const ScoreReq = await axios.get(
