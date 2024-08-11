@@ -30,13 +30,29 @@ const MainPage = () => {
     const userId = localStorage.getItem("userId");
 
     try {
+      console.log("HELLO");
       const req = await axios.get(`${ApiBaseURL}/user/information/${userId}`);
       const data = req.data;
+
+      const DailyReq = await axios.get(
+        `${ApiBaseURL}/user/daily-info/${userId}?mealDate=${"2024-08-11"}`
+      );
+      const DailyData = DailyReq.data;
+
+      console.log(DailyData);
+
       const pregnantWeek = PregnantWeekCalculator(data.pregnant);
 
       setPregnantPeriod(pregnantWeek);
-      if (!data.score) setUserScore(0);
-      else setUserScore(data.score);
+      if (!DailyData.score) {
+        setUserScore(0);
+        setBackgroundColor(getColor(0));
+        setAnimateNumber(Math.floor(0 / 20) - 1);
+      } else {
+        setUserScore(DailyData.score);
+        setBackgroundColor(getColor(DailyData.score));
+        setAnimateNumber(Math.floor(DailyData.score / 20) - 1);
+      }
     } catch (e: any) {
       alert(e.message);
       console.log(e);
@@ -55,11 +71,6 @@ const MainPage = () => {
   useEffect(() => {
     getUserData();
   }, []);
-
-  useEffect(() => {
-    setBackgroundColor(getColor(UserScore));
-    setAnimateNumber(Math.floor(UserScore / 20) - 1);
-  }, [UserScore]);
 
   useEffect(() => {
     if (localStorage.getItem("userId") === null) {
@@ -100,8 +111,6 @@ const MainPage = () => {
       console.log("Error fetching mealData:", error);
     }
   }, []);
-
-  console.log(mealData);
 
   return (
     <>
