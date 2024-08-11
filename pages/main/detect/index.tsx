@@ -6,6 +6,9 @@ import { CloseIconV2 } from "@/src/assets/icon/close-icon-v2";
 import { useRouter } from "next/router";
 import { useEffect, useRef, useState } from "react";
 import translate from "translate";
+import axios from "axios";
+import { FoodPopup } from "@/components/popup/FoodPopup";
+import { FoodGPTPopup } from "@/components/popup/FoodGPTPopup";
 
 type Prediction = {
   bbox: [number, number, number, number];
@@ -23,7 +26,11 @@ const DetectPage = () => {
     []
   );
   const [showModal, setShowModal] = useState<boolean>(false);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+
+  const [foodScore, setFoodScore] = useState<number>(0);
+  const [foodData, setFoodData] = useState<any>(null);
+  const [foodPopup, setFoodPopup] = useState<number>(0);
 
   const imageRef = useRef<HTMLImageElement | null>(null);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
@@ -50,6 +57,7 @@ const DetectPage = () => {
   };
 
   const handleTakePhoto = async () => {
+    setIsLoading(false);
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ video: true });
       setStream(stream);
@@ -83,6 +91,7 @@ const DetectPage = () => {
   };
 
   const processImage = async (imageUrl: string) => {
+    setIsLoading(true);
     const imgElement = new Image();
     imgElement.src = imageUrl;
     imgElement.onload = async () => {
@@ -104,8 +113,33 @@ const DetectPage = () => {
         })
       );
 
-      setTranslatedPredictions(translatedClasses);
+      console.log(translatedClasses);
+
+      try {
+        const FoodReq = await axios.get(
+          `https://api.summerflow.fun/v1/foods?query=${translatedClasses[0]}`
+        );
+
+        const FoodTempArr = FoodReq.data.foodInfos;
+        const FoodDataTemp = FoodTempArr[0];
+
+        const UserId = localStorage.getItem("userId");
+        const ScoreReq = await axios.get(
+          `https://api.summerflow.fun/v1/foods/daily-score-diff?userId=${UserId}&foodId=${
+            FoodDataTemp["id"]
+          }&mealDate=${"2024-08-11"}`
+        );
+
+        FoodDataTemp.score = ScoreReq.data.score_diff;
+        setFoodData(FoodDataTemp);
+        setFoodScore(ScoreReq.data.score_diff);
+      } catch (e: any) {
+        setFoodScore(-1000);
+      }
+
+      if (translatedClasses[0]) setTranslatedPredictions(translatedClasses);
       drawPredictions(predictions);
+      setIsLoading(false);
     };
   };
 
@@ -226,10 +260,20 @@ const DetectPage = () => {
                         className="flex flex-col items-center gap-8"
                       >
                         <div>
-                          <span className="text-7xl font-jeju mr-2  text-[#E56A40]">
-                            -58
-                          </span>
-                          <span className="text-3xl  text-[#000]">점</span>
+                          {foodScore === -1000 ? (
+                            <>
+                              <span className={`font-jeju text-sm`}>
+                                이건 먹으면 안될것 같아요..
+                              </span>
+                            </>
+                          ) : (
+                            <>
+                              <span className="text-7xl font-jeju mr-2  text-[#E56A40]">
+                                {foodScore}
+                              </span>
+                              <span className="text-3xl  text-[#000]">점</span>
+                            </>
+                          )}
                         </div>
                       </li>
                     ))}
@@ -245,12 +289,22 @@ const DetectPage = () => {
             </div>
             {predictions.length > 0 && (
               <>
-                <button className="py-3 mt-5 cursor-pointer shadow-lg rounded-full justify-center flex text-base w-[247px] bg-white">
-                  왜 -58점 인가요?
-                </button>
-                <button className="py-3 cursor-pointer shadow-lg rounded-full justify-center flex text-base w-[247px] bg-white">
-                  더 안전하게 먹는법?
-                </button>
+                {foodScore !== -1000 && (
+                  <>
+                    <button
+                      onClick={() => setFoodPopup(1)}
+                      className="py-3 mt-5 cursor-pointer shadow-lg rounded-full justify-center flex text-base w-[247px] bg-white"
+                    >
+                      {`왜 ${foodScore}점 인가요?`}
+                    </button>
+                    <button
+                      onClick={() => setFoodPopup(2)}
+                      className="py-3 cursor-pointer shadow-lg rounded-full justify-center flex text-base w-[247px] bg-white"
+                    >
+                      더 안전하게 먹는법?
+                    </button>
+                  </>
+                )}
               </>
             )}
           </div>
@@ -332,6 +386,17 @@ const DetectPage = () => {
             사진 촬영
           </button>
         </div>
+      )}
+
+      {foodPopup === 1 && (
+        <>
+          <FoodPopup foodData={foodData} setFoodPopup={setFoodPopup} />{" "}
+        </>
+      )}
+      {foodPopup === 2 && (
+        <>
+          <FoodGPTPopup foodData={foodData} setFoodPopup={setFoodPopup} />{" "}
+        </>
       )}
     </main>
   );
