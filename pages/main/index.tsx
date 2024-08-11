@@ -85,7 +85,9 @@ const MainPage = () => {
         );
         setMealData(res.data);
       };
-      fetchData();
+      if (localStorage.getItem("userId")) {
+        fetchData();
+      }
     } catch (error) {
       console.log("Error fetching mealData:", error);
     }

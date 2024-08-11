@@ -95,6 +95,10 @@ const SearchMealPage = () => {
     }
   }, [debounceSearch]);
 
+  useEffect(() => {
+    localStorage.getItem("userId") || router.push("/login");
+  }, []);
+
   return (
     <main className={`w-screen h-screen grid place-items-center`}>
       <div
