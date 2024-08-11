@@ -69,24 +69,27 @@ const MainPage = () => {
     router.replace("/main");
   };
 
-  // useEffect(() => {
-  //   try {
-  //     const fetchData = async () => {
-  //       const params = {
-  //         userId: localStorage.getItem("userId"),
-  //         foodId: router.query.foodId,
-  //         mealDate: new Date().toISOString().split("T")[0],
-  //       };
-  //       const res = await axios.get(`${ApiBaseURL}/foods/daily-score-diff`, {
-  //         params,
-  //       });
-  //       setMealData(res.data);
-  //     };
-  //     fetchData();
-  //   } catch (error) {
-  //     console.log("Error fetching mealData:", error);
-  //   }
-  // }, []);
+  useEffect(() => {
+    try {
+      const fetchData = async () => {
+        const params = {
+          mealDate: new Date().toISOString().split("T")[0],
+        };
+        const res = await axios.get(
+          `${ApiBaseURL}/user/daily-info/${localStorage.getItem("userId")}`,
+          {
+            params,
+          }
+        );
+        setMealData(res.data);
+      };
+      fetchData();
+    } catch (error) {
+      console.log("Error fetching mealData:", error);
+    }
+  }, []);
+
+  console.log(mealData);
 
   return (
     <>
@@ -244,32 +247,31 @@ const MainPage = () => {
         >
           <span className="font-jeju text-2xl ">나의 점수</span>
           <div className="mt-4">
-            <span className="font-jeju text-5xl text-juicy_orange ">42</span>
+            <span className="font-jeju text-5xl text-juicy_orange ">
+              {mealData && mealData?.score ? mealData?.score : 0}
+            </span>
             <span className="font-jeju">점</span>
           </div>
           <div className="h-[1px] bg-[#8E8E8E] my-10" />
-          <span className="font-jeju text-lg ">어제의 나의 식단</span>
+          <span className="font-jeju text-lg ">오늘의 나의 식단</span>
           <div className="flex flex-col gap-1 mt-4 ">
             <div className="flex flex-row justify-between">
               <div className="flex flex-row gap-5 jb">
-                <span className="font-bold">탄수화물</span>
-                <span>2mg</span>
+                <span className="font-bold w-[60px]">단백질</span>
               </div>
-              <span>25%</span>
+              <span>{mealData?.nutritions.단백질 * 2}mg</span>
             </div>
             <div className="flex flex-row justify-between">
               <div className="flex flex-row gap-5 jb">
-                <span className="font-bold">탄수화물</span>
-                <span>2mg</span>
+                <span className="font-bold w-[60px]">지방</span>
               </div>
-              <span>25%</span>
+              <span>{mealData?.nutritions.지방 * 2}mg</span>
             </div>
             <div className="flex flex-row justify-between">
               <div className="flex flex-row gap-5 jb">
-                <span className="font-bold">탄수화물</span>
-                <span>2mg</span>
+                <span className="font-bold w-[60px]">탄수화물</span>
               </div>
-              <span>25%</span>
+              <span>{mealData?.nutritions.탄수화물 * 2}mg</span>
             </div>
           </div>
           <div className="flex flex-row w-full justify-between mt-10">
