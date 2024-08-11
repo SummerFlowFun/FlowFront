@@ -32,6 +32,8 @@ const DetectPage = () => {
   const [foodData, setFoodData] = useState<any>(null);
   const [foodPopup, setFoodPopup] = useState<number>(0);
 
+  const [stage, setStage] = useState(0);
+
   const imageRef = useRef<HTMLImageElement | null>(null);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const [stream, setStream] = useState<MediaStream | null>(null);
@@ -52,6 +54,7 @@ const DetectPage = () => {
       const file = files[0];
       const imageUrl = URL?.createObjectURL(file);
       setImage(imageUrl);
+      setStage(1);
       processImage(imageUrl);
     }
   };
@@ -92,6 +95,7 @@ const DetectPage = () => {
 
   const processImage = async (imageUrl: string) => {
     setIsLoading(true);
+    setStage(1);
     const imgElement = new Image();
     imgElement.src = imageUrl;
     imgElement.onload = async () => {
@@ -185,145 +189,141 @@ const DetectPage = () => {
 
   return (
     <main className={`w-screen h-screen grid place-items-center`}>
-      <div
-        className={`w-full max-w-[26.875rem] h-full bg-milky_white grid grid-rows-[3rem_auto]`}
-      >
-        <div
-          className="flex justify-end  p-4 cursor-pointer "
-          onClick={() => router.back()}
-        >
-          <CloseIconV2 />
-        </div>
-
-        {isLoading ? (
-          <>
-            <div
-              className={`w-full h-full flex flex-col items-center justify-center gap-4`}
-            >
-              <MiniLoading />
-              <span className={`font-jeju`}>
-                FLOW AI가 음식을 판별하는 중이에요.
-              </span>
-            </div>
-          </>
-        ) : (
-          <div className="gap-10 items-center flex flex-col pb-[100px]">
-            {predictions.length > 0 ? (
-              <div className="flex flex-row justify-center h-fit mt-5">
-                <ul>
-                  {translatedPredictions.map((translatedClass, index) => (
-                    <li
-                      key={index}
-                      className="font-jeju text-6xl text-[#808080]"
-                    >
-                      {translatedClass}!!
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            ) : (
-              <></>
-            )}{" "}
-            <div className=" w-full justify-center h-fit flex ">
-              {image ? (
-                <>
-                  <img
-                    className=" rounded-lg  "
-                    src={image}
-                    alt="Uploaded"
-                    width={300}
-                    height={300}
-                  />
-                  <canvas
-                    ref={canvasRef}
-                    style={{
-                      position: "absolute",
-                      top: 0,
-                      left: 0,
-                    }}
-                  />
-                </>
-              ) : (
-                <>
-                  {" "}
-                  <video
-                    ref={videoRef}
-                    width={300}
-                    height={300}
-                    className="rounded-lg"
-                  />
-                  <canvas
-                    ref={canvasRef}
-                    style={{
-                      position: "absolute",
-                      top: 0,
-                      left: 0,
-                    }}
-                  />
-                </>
-              )}
-            </div>
-            <div>
-              {translatedPredictions.length > 0 ? (
-                <div className="flex flex-row justify-center h-fit mt-5">
-                  <ul>
-                    {translatedPredictions.map((prediction, index) => (
-                      <li
-                        key={index}
-                        className="flex flex-col items-center gap-8"
-                      >
-                        <div>
-                          {foodScore === -1000 ? (
-                            <>
-                              <span className={`font-jeju text-sm`}>
-                                이건 먹으면 안될것 같아요..
-                              </span>
-                            </>
-                          ) : (
-                            <>
-                              <span className="text-7xl font-jeju mr-2  text-[#E56A40]">
-                                {foodScore}
-                              </span>
-                              <span className="text-3xl  text-[#000]">점</span>
-                            </>
-                          )}
-                        </div>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              ) : (
-                isLoading && (
-                  <>
-                    <MiniLoading />
-                  </>
-                )
-              )}
-            </div>
-            {predictions.length > 0 && (
+      {stage === 1 && (
+        <>
+          <div className={`w-full max-w-[26.875rem] h-full bg-milky_white `}>
+            {isLoading ? (
               <>
-                {foodScore !== -1000 && (
+                <div
+                  className={`w-full h-full flex flex-col items-center justify-center gap-4`}
+                >
+                  <MiniLoading />
+                  <span className={`font-jeju`}>
+                    FLOW AI가 음식을 판별하는 중이에요.
+                  </span>
+                </div>
+              </>
+            ) : (
+              <div className="gap-10 items-center flex flex-col pb-[100px]">
+                {predictions.length > 0 ? (
+                  <div className="flex flex-row justify-center h-fit mt-5">
+                    <ul>
+                      {translatedPredictions.map((translatedClass, index) => (
+                        <li
+                          key={index}
+                          className="font-jeju text-6xl text-[#808080]"
+                        >
+                          {translatedClass}!!
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                ) : (
+                  <></>
+                )}{" "}
+                <div className=" w-full justify-center h-fit flex ">
+                  {image ? (
+                    <>
+                      <img
+                        className=" rounded-lg  "
+                        src={image}
+                        alt="Uploaded"
+                        width={300}
+                        height={300}
+                      />
+                      <canvas
+                        ref={canvasRef}
+                        style={{
+                          position: "absolute",
+                          top: 0,
+                          left: 0,
+                        }}
+                      />
+                    </>
+                  ) : (
+                    <>
+                      {" "}
+                      <video
+                        ref={videoRef}
+                        width={300}
+                        height={300}
+                        className="rounded-lg"
+                      />
+                      <canvas
+                        ref={canvasRef}
+                        style={{
+                          position: "absolute",
+                          top: 0,
+                          left: 0,
+                        }}
+                      />
+                    </>
+                  )}
+                </div>
+                <div>
+                  {translatedPredictions.length > 0 ? (
+                    <div className="flex flex-row justify-center h-fit mt-5">
+                      <ul>
+                        {translatedPredictions.map((prediction, index) => (
+                          <li
+                            key={index}
+                            className="flex flex-col items-center gap-8"
+                          >
+                            <div>
+                              {foodScore === -1000 ? (
+                                <>
+                                  <span className={`font-jeju text-sm`}>
+                                    이건 먹으면 안될것 같아요..
+                                  </span>
+                                </>
+                              ) : (
+                                <>
+                                  <span className="text-7xl font-jeju mr-2  text-[#E56A40]">
+                                    {foodScore}
+                                  </span>
+                                  <span className="text-3xl  text-[#000]">
+                                    점
+                                  </span>
+                                </>
+                              )}
+                            </div>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  ) : (
+                    isLoading && (
+                      <>
+                        <MiniLoading />
+                      </>
+                    )
+                  )}
+                </div>
+                {predictions.length > 0 && (
                   <>
-                    <button
-                      onClick={() => setFoodPopup(1)}
-                      className="py-3 mt-5 cursor-pointer shadow-lg rounded-full justify-center flex text-base w-[247px] bg-white"
-                    >
-                      {`왜 ${foodScore}점 인가요?`}
-                    </button>
-                    <button
-                      onClick={() => setFoodPopup(2)}
-                      className="py-3 cursor-pointer shadow-lg rounded-full justify-center flex text-base w-[247px] bg-white"
-                    >
-                      더 안전하게 먹는법?
-                    </button>
+                    {foodScore !== -1000 && (
+                      <>
+                        <button
+                          onClick={() => setFoodPopup(1)}
+                          className="py-3 mt-5 cursor-pointer shadow-lg rounded-full justify-center flex text-base w-[247px] bg-white"
+                        >
+                          {`왜 ${foodScore}점 인가요?`}
+                        </button>
+                        <button
+                          onClick={() => setFoodPopup(2)}
+                          className="py-3 cursor-pointer shadow-lg rounded-full justify-center flex text-base w-[247px] bg-white"
+                        >
+                          더 안전하게 먹는법?
+                        </button>
+                      </>
+                    )}
                   </>
                 )}
-              </>
+              </div>
             )}
           </div>
-        )}
-      </div>
-
+        </>
+      )}
       <input
         type="file"
         accept="image/*"
@@ -331,21 +331,14 @@ const DetectPage = () => {
         style={{ display: "none" }}
         onChange={handleFileChange}
       />
-
-      {showModal && (
+      {stage === 0 && (
         <div
-          className="
-        fixed
-        top-1/2
-        left-1/2
-        transform
-        -translate-x-1/2
-        -translate-y-1/2
-        bg-white
+          className="        bg-milky_white
         rounded-lg
         p-8
-        w-[90%]
-        max-w-[400px]
+        w-full
+        h-full
+        max-w-[26.875rem]
         shadow-lg
         flex
         flex-col
@@ -359,7 +352,7 @@ const DetectPage = () => {
             돼?!
           </div>
           <span className="">음식 사진이 정확하게 보이도록 첨부해주세요!</span>
-          <div className="flex flex-row justify-center gap-4 my-5">
+          <div className="flex flex-row w-full justify-center gap-4 my-5 ">
             {/* <button
               className="rounded-full font-jeju text-white bg-water_blue p-4 items-center flex justify-center w-[150px] h-fit"
               onClick={() => {
@@ -370,7 +363,7 @@ const DetectPage = () => {
               사진찍기
             </button> */}
             <button
-              className="rounded-full font-jeju text-white bg-water_blue p-4 items-center flex justify-center w-full h-fit"
+              className="rounded-full font-jeju text-white bg-water_blue p-4 items-center flex  justify-center w-full h-fit"
               onClick={(e) => {
                 e.preventDefault();
                 fileInputRef.current?.click();
