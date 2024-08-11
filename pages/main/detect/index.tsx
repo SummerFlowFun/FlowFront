@@ -3,10 +3,10 @@ import "@tensorflow/tfjs";
 
 import { MiniLoading } from "@/components/Loading/Loading";
 import { CloseIconV2 } from "@/src/assets/icon/close-icon-v2";
-import { Modal } from "@/src/component/atom/Modal.tsx/Modal";
 import { useRouter } from "next/router";
 import { useEffect, useRef, useState } from "react";
 import translate from "translate";
+
 type Prediction = {
   bbox: [number, number, number, number];
   class: string;
@@ -23,7 +23,7 @@ const DetectPage = () => {
     []
   );
   const [showModal, setShowModal] = useState<boolean>(false);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const imageRef = useRef<HTMLImageElement | null>(null);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
@@ -37,7 +37,9 @@ const DetectPage = () => {
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files;
-    if (!files) return;
+    if (!files) {
+      return;
+    }
 
     if (files && files.length > 0) {
       const file = files[0];
@@ -94,7 +96,7 @@ const DetectPage = () => {
       setPredictions(predictions);
 
       const translatedClasses = await Promise.all(
-        predictions.map(async (prediction: any) => {
+        predictions.map(async (prediction) => {
           const translatedClass = await translate(prediction.class, {
             to: "ko",
           });
@@ -104,7 +106,6 @@ const DetectPage = () => {
 
       setTranslatedPredictions(translatedClasses);
       drawPredictions(predictions);
-      setIsLoading(false);
     };
   };
 
@@ -177,7 +178,7 @@ const DetectPage = () => {
               <></>
             )}{" "}
             <div className=" w-full justify-center h-fit flex ">
-              {image && (
+              {image ? (
                 <>
                   <img
                     className=" rounded-lg  "
@@ -188,9 +189,29 @@ const DetectPage = () => {
                   />
                   <canvas
                     ref={canvasRef}
-                    width={imageRef.current?.width || 0}
-                    height={imageRef.current?.height || 0}
-                    style={{ position: "absolute", top: 0, left: 0 }}
+                    style={{
+                      position: "absolute",
+                      top: 0,
+                      left: 0,
+                    }}
+                  />
+                </>
+              ) : (
+                <>
+                  {" "}
+                  <video
+                    ref={videoRef}
+                    width={300}
+                    height={300}
+                    className="rounded-lg"
+                  />
+                  <canvas
+                    ref={canvasRef}
+                    style={{
+                      position: "absolute",
+                      top: 0,
+                      left: 0,
+                    }}
                   />
                 </>
               )}
@@ -215,7 +236,11 @@ const DetectPage = () => {
                   </ul>
                 </div>
               ) : (
-                <></>
+                isLoading && (
+                  <>
+                    <MiniLoading />
+                  </>
+                )
               )}
             </div>
             {predictions.length > 0 && (
@@ -241,7 +266,26 @@ const DetectPage = () => {
       />
 
       {showModal && (
-        <Modal onClose={() => setShowModal(false)}>
+        <div
+          className="
+        fixed
+        top-1/2
+        left-1/2
+        transform
+        -translate-x-1/2
+        -translate-y-1/2
+        bg-white
+        rounded-lg
+        p-8
+        w-[90%]
+        max-w-[400px]
+        shadow-lg
+        flex
+        flex-col
+        items-center
+        gap-8
+        "
+        >
           <div className="font-jeju text-7xl flex justify-center my-20">
             이거 <br />
             먹어도 <br />
@@ -267,7 +311,17 @@ const DetectPage = () => {
               사진 첨부하기
             </button>
           </div>
-        </Modal>
+          {/* 닫기 */}
+          <button
+            className="rounded-full w-full font-jeju text-white bg-juicy_orange p-4 items-center flex justify-center"
+            onClick={() => {
+              router.back();
+              setShowModal(false);
+            }}
+          >
+            닫기
+          </button>
+        </div>
       )}
       {stream && (
         <div className="absolute bottom-10 left-1/2 transform -translate-x-1/2">

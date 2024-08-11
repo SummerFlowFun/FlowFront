@@ -7,17 +7,42 @@ interface Props {
 export const Modal = ({ children, onClose, className }: Props) => {
   return (
     <div
-      className={`fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 ${className}`}
+      className="
+
+    flex
+    absolute
+    items-center
+    bg-black
+    justify-center
+
+    z-50
+    rounded-lg
+  "
     >
-      <div className="bg-white rounded-lg p-8 w-4/5 max-w-lg text-center">
-        <h2 className="text-xl font-bold mb-4"></h2>
-        <p>{children}</p>
+      <div
+        className={`
+        bg-white
+        relative
+        rounded-2xl
+        shadow-2xl
+        p-10
+        ${className}
+      `}
+      >
         <button
+          className="
+          absolute
+          top-5
+          right-5
+          text-2xl
+          text-gray-500
+          focus:outline-none
+        "
           onClick={onClose}
-          className="mt-4 font-jeju px-4 py-2 w-full bg-juicy_orange text-white rounded-full"
         >
-          닫기
+          &times;
         </button>
+        {children}
       </div>
     </div>
   );
