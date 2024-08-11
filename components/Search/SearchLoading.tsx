@@ -1,8 +1,7 @@
 import Header from "@/src/component/atom/Header/Header";
-import { useEffect, useState } from "react";
-import { MiniLoading } from "../Loading/Loading";
 import axios from "axios";
-import { ApiBaseURL } from "../URL";
+import { useEffect } from "react";
+import { MiniLoading } from "../Loading/Loading";
 
 export const SearchLoading = ({
   foodName,
