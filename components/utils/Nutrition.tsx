@@ -15,6 +15,7 @@ export const getNutritionFromFoodData = (foodData: any) => {
         Name: KeyArr[i],
         Value: foodData[KeyArr[i]],
       };
+      if (!TempObj.Value) TempObj.Value = 0;
       NutritionArr.push(TempObj);
     }
   }

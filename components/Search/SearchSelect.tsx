@@ -1,7 +1,7 @@
 import Header from "@/src/component/atom/Header/Header";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { SmallMiniLoading } from "../Loading/Loading";
+import { MiniLoading, SmallMiniLoading } from "../Loading/Loading";
 
 export const SearchSelect = ({
   setStage,
@@ -14,8 +14,10 @@ export const SearchSelect = ({
   setFoodNumber,
 }: any) => {
   const [isFind, setIsFind] = useState<boolean>(true);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const handleSelect = async (food: any) => {
+    setIsLoading(true);
     const TempData = food;
     const UserId = localStorage.getItem("userId");
 
@@ -29,6 +31,7 @@ export const SearchSelect = ({
     TempData.score = ScoreData;
     setFoodData(food);
     setStage(2);
+    setIsLoading(false);
   };
 
   const getFoodData = async () => {
@@ -72,49 +75,63 @@ export const SearchSelect = ({
         <div className={`w-full px-4 bg-milkty_white`}>
           <Header title="검색" />
         </div>
-        <div
-          className={`flex flex-col w-full  items-center py-6 bg-milky_white h-full gap-4`}
-        >
-          {foodArr.map((food: any, index: number) => {
-            return (
-              <button
-                onClick={() => {
-                  handleSelect(food);
-                }}
-                key={index}
-                className={`h-[3rem] w-4/5 bg-white rounded-lg flex flex-col shadow-lg p-2 hover:-translate-y-1 hover:-translate-x-1`}
-              >
-                <span className={`font-jeju`}>{food["식품명"]}</span>
-                <span className={`font-neo text-xs text-gray1`}>
-                  {food["제조사명"]}
-                </span>
-              </button>
-            );
-          })}
-        </div>
-        <div
-          className={`w-full h-[10rem] bg-milky_white flex flex-col items-center justify-center gap-2`}
-        >
-          {isFind && <SmallMiniLoading />}
-          <div className={`flex flex-col text-center justify-center`}>
-            <span
-              className={`font-jeju `}
-            >{`맘마미는 10만개의 음식데이터중에서 원하는 음식`}</span>
+        {isLoading ? (
+          <>
+            <div
+              className={`w-full h-full bg-milky_white flex flex-col font-jeju items-center justify-center gap-4`}
+            >
+              <MiniLoading />
+              <span>사용자의 영양 상태 파악중...</span>
+            </div>
+          </>
+        ) : (
+          <>
+            <div
+              className={`flex flex-col w-full  items-center py-6 bg-milky_white h-full gap-4`}
+            >
+              {foodArr.map((food: any, index: number) => {
+                return (
+                  <button
+                    onClick={() => {
+                      handleSelect(food);
+                    }}
+                    key={index}
+                    className={`h-[3rem] w-4/5 bg-white rounded-lg flex flex-col shadow-lg p-2 hover:-translate-y-1 hover:-translate-x-1`}
+                  >
+                    <span className={`font-jeju`}>{food["식품명"]}</span>
+                    <span className={`font-neo text-xs text-gray1`}>
+                      {food["제조사명"]}
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
 
-            <span
-              className={`font-jeju `}
-            >{`성분과 데이터를 최소 100개 이상 찾아줘요!`}</span>
-            {isFind ? (
-              <span
-                className={`font-jeju `}
-              >{`현재 ${foodNumber}개의 ${foodName}에 대한 정보를 찾고있어요...`}</span>
-            ) : (
-              <span
-                className={`font-jeju `}
-              >{`${foodNumber}개의 ${foodName}에 대한 정보를 찾았어요...`}</span>
-            )}
-          </div>
-        </div>
+            <div
+              className={`w-full h-[10rem] bg-milky_white flex flex-col items-center justify-center gap-2`}
+            >
+              {isFind && <SmallMiniLoading />}
+              <div className={`flex flex-col text-center justify-center`}>
+                <span
+                  className={`font-jeju `}
+                >{`맘마미는 10만개의 음식데이터중에서 원하는 음식`}</span>
+
+                <span
+                  className={`font-jeju `}
+                >{`성분과 데이터를 최소 100개 이상 찾아줘요!`}</span>
+                {isFind ? (
+                  <span
+                    className={`font-jeju `}
+                  >{`현재 ${foodNumber}개의 ${foodName}에 대한 정보를 찾고있어요...`}</span>
+                ) : (
+                  <span
+                    className={`font-jeju `}
+                  >{`${foodNumber}개의 ${foodName}에 대한 정보를 찾았어요...`}</span>
+                )}
+              </div>
+            </div>
+          </>
+        )}
       </div>
     </>
   );
