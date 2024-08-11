@@ -3,7 +3,7 @@ import Text from "@/src/component/atom/Text";
 import { color } from "@/src/utils/color-map";
 import axios from "axios";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const LoginPage = () => {
   const router = useRouter();
@@ -36,6 +36,12 @@ const LoginPage = () => {
       }
     }
   };
+
+  useEffect(() => {
+    if (localStorage.getItem("userId")) {
+      router.push("/main");
+    }
+  }, []);
 
   return (
     <div className={`w-screen h-screen grid place-items-center `}>

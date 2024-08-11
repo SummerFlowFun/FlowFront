@@ -1,8 +1,7 @@
 import Header from "@/src/component/atom/Header/Header";
-import { MiniLoading, SmallMiniLoading } from "../Loading/Loading";
 import axios from "axios";
 import { ApiBaseURL } from "../URL";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 
 export const SearchSelect = ({
   setStage,
@@ -79,7 +78,15 @@ export const SearchSelect = ({
           {foodArr.map((food: any, index: number) => {
             return (
               <button
-                onClick={() => handleSelect(food)}
+                onClick={() => {
+                  if (localStorage.getItem("userId") === null) {
+                    alert("로그인이 필요합니다.");
+                    router.push("/login");
+                    return;
+                  } else {
+                    handleSelect(food);
+                  }
+                }}
                 key={index}
                 className={`h-[3rem] w-4/5 bg-white rounded-lg flex flex-col shadow-lg p-2 hover:-translate-y-1 hover:-translate-x-1`}
               >
