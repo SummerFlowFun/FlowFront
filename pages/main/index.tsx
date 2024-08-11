@@ -32,7 +32,9 @@ const MainPage = () => {
     try {
       const req = await axios.get(`${ApiBaseURL}/user/information/${userId}`);
       const data = req.data;
+      console.log(data);
       const pregnantWeek = PregnantWeekCalculator(data.pregnant);
+
       setPregnantPeriod(pregnantWeek);
       if (!data.score) setUserScore(0);
       else setUserScore(data.score);
@@ -176,7 +178,7 @@ const MainPage = () => {
                 <div
                   className={`bg-white text-center py-2 flex items-center justify-center rounded-full`}
                 >
-                  <span className={`font-neoB`}>영양소</span>
+                  <span className={`font-neoB`}>단백질</span>
                 </div>
               </div>
             </div>
