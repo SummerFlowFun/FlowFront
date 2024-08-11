@@ -113,8 +113,10 @@ const DetectPage = () => {
         })
       );
 
-      console.log(translatedClasses);
-
+      if (translatedClasses.length === 0) {
+        alert("음식을 인식하지 못했어요! 다시 시도해주세요.");
+        router.back();
+      }
       try {
         const FoodReq = await axios.get(
           `https://api.summerflow.fun/v1/foods?query=${translatedClasses[0]}`
