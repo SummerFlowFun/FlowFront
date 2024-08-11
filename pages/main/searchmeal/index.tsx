@@ -12,6 +12,7 @@ const SearchMealPage = () => {
   const [search, setSearch] = useState("");
   const debounceSearch = useDebounce(search, 250);
   const [data, setData] = useState<any>(null);
+
   const [images, setImages] = useState<{ [key: string]: string }>({});
   const [selectedFood, setSelectedFood] = useState<any>(null);
   const [loading, setLoading] = useState(false);
@@ -60,14 +61,31 @@ const SearchMealPage = () => {
     }
   };
 
-  const submitHandler = (itemTitle: string) => {
-    router.push({
-      pathname: "/main",
-      query: {
-        ...router.query,
-        food: itemTitle,
-      },
-    });
+  const submitHandler = async (itemTitle: string, foodId: string) => {
+    try {
+      const res = await axios.post("https://api.summerflow.fun/v1/user/meal", {
+        userId: localStorage.getItem("userId"),
+        foodId: foodId,
+        mealType: router.query.time,
+        mealDate: new Date().toISOString().split("T")[0],
+      });
+      router.push({
+        pathname: "/main",
+        query: {
+          ...router.query,
+          food: itemTitle,
+          foodId: foodId,
+        },
+      });
+    } catch (error: any) {
+      console.log("Error fetching image:", error);
+      if (error.response.status === 409) {
+        alert("이미 추가된 음식입니다.");
+        return;
+      } else {
+        alert("음식 추가에 실패했습니다.");
+      }
+    }
   };
 
   useEffect(() => {
@@ -120,7 +138,7 @@ const SearchMealPage = () => {
                     <div
                       key={index}
                       className="flex flex-row gap-2 items-end cursor-pointer"
-                      onClick={() => submitHandler(item.식품명)}
+                      onClick={() => submitHandler(item.식품명, item.id)}
                     >
                       <div className="w-[116px] h-[116px] relative">
                         <img
