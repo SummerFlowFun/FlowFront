@@ -12,36 +12,17 @@ const LoginPage = () => {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 
   const loginHandler = async () => {
-    if (!id) {
-      alert("아이디를 입력해주세요");
-    } else if (!password) {
-      alert("비밀번호를 입력해주세요");
-    } else {
-      try {
-        const res = await axios.post(
-          "https://api.summerflow.fun/v1/auth/login",
-          {
-            email: id,
-            password: password,
-          }
-        );
-        localStorage.setItem("userId", res.data.id);
-        router.push("/main");
-      } catch (error: any) {
-        if (error.response.status === 403) {
-          alert("비밀번호가 일치하지 않습니다");
-        } else {
-          alert("로그인에 실패했습니다");
-        }
+    try {
+      localStorage.setItem("userId", "SUMMERFLOW");
+      router.push("/main");
+    } catch (error: any) {
+      if (error.response.status === 403) {
+        alert("비밀번호가 일치하지 않습니다");
+      } else {
+        alert("로그인에 실패했습니다");
       }
     }
   };
-
-  useEffect(() => {
-    if (localStorage.getItem("userId")) {
-      router.push("/main");
-    }
-  }, []);
 
   return (
     <div className={`w-screen h-screen grid place-items-center `}>
@@ -62,12 +43,7 @@ const LoginPage = () => {
           </div>
           <section className="px-5 mt-[88px]">
             <div className="flex flex-col gap-3">
-              <input
-                value={id}
-                className="py-3 px-6 rounded-full outline-none"
-                placeholder="아이디"
-                onChange={(e) => setId(e.target.value)}
-              />
+              <input value={id} className="py-3 px-6 rounded-full outline-none" placeholder="아이디" onChange={(e) => setId(e.target.value)} />
               <input
                 value={password}
                 className="py-3 px-6 rounded-full  outline-none"
@@ -76,12 +52,7 @@ const LoginPage = () => {
                 onChange={(e) => setPassword(e.target.value)}
               />
               <div className="flex flex-row gap-1 ml-8">
-                <input
-                  type="checkbox"
-                  className=""
-                  onChange={(e) => setIsPasswordVisible(e.target.checked)}
-                  checked={isPasswordVisible}
-                />
+                <input type="checkbox" className="" onChange={(e) => setIsPasswordVisible(e.target.checked)} checked={isPasswordVisible} />
                 <Text
                   fontSize="caption"
                   color={"#777777"}
@@ -96,37 +67,21 @@ const LoginPage = () => {
             </div>
           </section>
           <div className="mt-12 mx-5 flex flex-col gap-3">
-            <button
-              className="py-3 bg-juicy_orange rounded-full w-full "
-              onClick={loginHandler}
-            >
+            <button className="py-3 bg-juicy_orange rounded-full w-full " onClick={loginHandler}>
               <Text fontSize="body1Bold" color={color.milky_white}>
                 로그인
               </Text>
             </button>
             <div className="flex flex-row justify-between items-center px-6">
               <div className="flex flex-row items-center gap-5">
-                <Text
-                  fontSize="caption"
-                  color={"#777777"}
-                  className="cursor-pointer"
-                >
+                <Text fontSize="caption" color={"#777777"} className="cursor-pointer">
                   아이디 찾기
                 </Text>
-                <Text
-                  fontSize="caption"
-                  color={"#777777"}
-                  className="cursor-pointer"
-                >
+                <Text fontSize="caption" color={"#777777"} className="cursor-pointer">
                   비밀번호 찾기
                 </Text>
               </div>
-              <Text
-                fontSize="caption"
-                color={"#777777"}
-                className="cursor-pointer"
-                onClick={() => router.push("/signup")}
-              >
+              <Text fontSize="caption" color={"#777777"} className="cursor-pointer" onClick={() => router.push("/signup")}>
                 회원가입
               </Text>
             </div>
